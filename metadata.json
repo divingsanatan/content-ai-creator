@@ -1,0 +1,6 @@
+{
+  "name": "DharmaCraft - Sanatan Social Content Engine",
+  "description": "Deep-analysis content creation suite for Sanatan Dharma practitioners and life coaches, bridging trending life problems with authentic Vedic wisdom.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
