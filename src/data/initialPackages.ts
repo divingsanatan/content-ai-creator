@@ -4,6 +4,9 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
   topic: 'Why You Freeze When You Get Money: Healing Root Panic',
   category: 'money_business',
   concept: 'Muladhara Chakra & Root Nervous System Regulation',
+  storyArchetype: 'paradox_of_success',
+  storySetting: 'Tuesday 2:30 PM parked in a car right after signing a dream contract',
+  personalLearningTakeaway: 'The nervous system cannot distinguish between survival terror and unfamiliar success until the root chakra is somaticized and grounded.',
   
   // Directing Guide for Solo Creator playing both roles
   directingGuide: {
@@ -41,18 +44,18 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
     {
       id: 'reel-1',
       cutNumber: 1,
-      title: 'The 2 AM Payday Panic Attack (High Relatability Hook)',
+      title: 'The Payday Panic Attack: When Success Freezes Your Body',
       timecodeInLongVideo: '00:00 - 00:48',
       targetDuration: '48s',
-      hookLine: 'Kal account me teen lakh rupaye aane ke baad main raat ke 2 baje bathroom floor pe hyperventilate kyu kar raha tha?!',
+      hookLine: 'Kal dopehar ko client ka bada payment clear hone ke baad, main celebrate karne ke bajay apni car me baithkar freeze kyu ho gaya?!',
       onScreenCaptionText: 'POV: Bank balance to badh gaya par nervous system ko lagta hai jaan khatre me hai 💀',
       audioTrackVibe: 'Tense ticking clock sound under Nakul, abrupt complete silence when Nikhil speaks first sentence',
-      editingDirection: 'Jump cut: Zoom in tight on Nakul staring at his glowing iPhone in the dark. Quick whip pan to Nikhil sitting completely still in warm natural light.',
+      editingDirection: 'Jump cut: Zoom in tight on Nakul staring at his glowing iPhone in his car. Quick whip pan to Nikhil sitting completely still in warm natural light.',
       dialogueExchanges: [
         {
           speaker: 'Nakul',
           note: '[Agitated, pacing, staring at phone with bloodshot eyes, sarcastic exasperation]',
-          line: 'Nikhil, mujhe bas ek baat bata before I lose my mind. Kal dopehar ko 3 lakh ka wire account me aaya. Teen mahine 80 hours a week kaam kiya tha maine! Mujhe bachhe ki tarah sona chahiye tha. Par raat ke 2 baje main bathroom floor pe lete hue ceiling fan ko ghoor raha hu, heart rate 140 BPM, aur dimaag keh raha hai ki agle mahine main sadak pe aa jaunga! Why does making money feel like someone handed my nervous system a live grenade?!'
+          line: 'Nikhil, mujhe bas ek baat bata before I lose my mind. Kal dopehar ko 3 lakh ka wire account me aaya. Teen mahine 80 hours a week kaam kiya tha maine! Mujhe celebrate karna chahiye tha. Par contract sign karke gaadi me baithte hi main freeze ho gaya, steering wheel pe thanda paseena, gala band, aur dimaag keh raha hai ki agle mahine sab chhin jayega! Why does making money feel like someone handed my nervous system a live grenade?!'
         },
         {
           speaker: 'Nikhil',
@@ -96,7 +99,7 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
         {
           speaker: 'Nakul',
           note: '[Blinks, thrown off by the gravity, tone drops slightly]',
-          line: 'Gita 2.47. Haan haan, "fal ki chinta mat karo". Har corporate coffee mug pe likha hota hai ye. Par ye mere 2 AM panic ko kaise roke ga?'
+          line: 'Gita 2.47. Haan haan, "fal ki chinta mat karo". Har corporate coffee mug pe likha hota hai ye. Par ye mere sudden success freeze ko kaise roke ga?'
         },
         {
           speaker: 'Nikhil',
@@ -148,7 +151,7 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
       id: 'd-1',
       speaker: 'Nakul',
       actorNote: '[Camera Left | Frantic energy, pacing around desk, phone in hand, looking directly at Nikhil with exasperation]',
-      dialogue: 'Nikhil, mujhe bas ek seedha jawab chahiye before I lose my mind. Kal dopehar ko 3 lakh ka wire account me credit hua. Teen mahine 80 hours a week kaam kiya tha maine! Mujhe bachhe ki tarah sona chahiye tha. Par raat ke 2:15 baje main bathroom floor pe lete hue ceiling fan ko ghoor raha hu, hyperventilate kar raha hu, convinced ki agle mahine main sadak pe aa jaunga! Why does making money feel like someone handed my nervous system a live grenade?!',
+      dialogue: 'Nikhil, mujhe bas ek seedha jawab chahiye before I lose my mind. Kal dopehar ko 3 lakh ka wire account me credit hua. Teen mahine 80 hours a week kaam kiya tha maine! Mujhe khushi se celebrate karna chahiye tha. Par contract sign karke gaadi me baithte hi main freeze ho gaya, steering wheel pe thanda paseena, gala band, convinced ki agle mahine sab chhin jayega! Why does making money feel like someone handed my nervous system a live grenade?!',
       timestamp: '00:00',
       isReelCutStart: true,
       reelCutId: 'reel-1'
@@ -237,7 +240,7 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
       id: 'd-13',
       speaker: 'Nakul',
       actorNote: '[Rolls eyes, familiar with the cliché]',
-      dialogue: 'Bhagavad Gita 2.47. Haan, "karm karo, fal ki chinta mat karo." Nikhil bhai, har HR manager bonus reject karte waqt yahi email signature me chipkata hai. Is detachment se mera 2 AM panic kaise theek hoga?',
+      dialogue: 'Bhagavad Gita 2.47. Haan, "karm karo, fal ki chinta mat karo." Nikhil bhai, har HR manager bonus reject karte waqt yahi email signature me chipkata hai. Is detachment se mera panic freeze kaise theek hoga?',
       timestamp: '05:40'
     },
     {
@@ -323,13 +326,13 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
       id: 'd-25',
       speaker: 'Nakul',
       actorNote: '[Energetic, pointing to screen]',
-      dialogue: 'Root to ground ho gayi, ab agla video dekho jahan hum break down kar rahe hain: 2 AM Relationship Panic—Kaise Ancestral Karma Heart Chakra ko block karta hai. Chalo, wahan milte hain!',
+      dialogue: 'Root to ground ho gayi, ab agla video dekho jahan hum break down kar rahe hain: Relationship Freeze—Kaise Ancestral Karma Heart Chakra ko block karta hai. Chalo, wahan milte hain!',
       timestamp: '11:35'
     }
   ],
 
   hook: {
-    ideaCollision: 'Maine ek entrepreneur ko ek hi dopehar me 3 lakh kamate dekha—aur raat ke 2 baje wahi insaan bathroom floor pe hyperventilate kar raha tha ki agle mahine wo sadak pe aa jayega.',
+    ideaCollision: 'Maine ek hardworking creator ko bada contract sign karte dekha—aur deal close hote hi wahi insaan celebrate karne ke bajay apni car me freeze ho gaya ki agle mahine sab chhin jayega.',
     alternateCollisionOptions: [
       'Aapka bank account khali isiliye nahi hai ki financial discipline nahi hai; wo isiliye khali hai kyunki cash hold karna aapke nervous system ko unsafe lagta hai.',
       'Hum paise ko screen pe numbers samajhte hain, par hamari spine achanak aayi hui prosperity ko cave me tiger aane jaisa register karti hai.',
@@ -340,7 +343,7 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
   stakes: {
     lowestPointStory: 'Teen saal pehle, jab bhi koi client payment clear hoti thi, mera chest instantly tight ho jata tha. 48 ghante ke andar ek emergency kharcha saamne aa jata: car breakdown, bewajah gadget purchase, impulsive investment. Mujhe lagta tha meri kismat kharab hai, jab tak maine body ka visceral pattern observe nahi kiya.',
     visceralBodyFeeling: 'Pair ke talvon me thandi sunn-pan, shallow breath jo sirf chest tak aati hai, aur kamre me aise ghoomna jaise kisi unseen fire se bhaag rahe ho.',
-    twoAmInternalDialogue: '"Agar maine ye paisa apne paas rakha, to koi na koi mujhse cheen lega. Agar main pehle hi uda du, to kam se kam catastrophe mere control me rahegi."'
+    twoAmInternalDialogue: '"Agar main is success ko hold nahi kar paya, to sab khatam ho jayega aur meri pol khul jayegi."'
   },
   turn: {
     livedRealization: 'Breakthrough tab aaya jab maine budgeting spreadsheets band karke zameen pe nange pair baithna shuru kiya. Problem financial literacy ki nahi thi—somatic load-bearing capacity ki thi.',
@@ -354,7 +357,7 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
     dialogueOrPresence: 'Mere mentor ne mera haath mere lower abdomen pe rakha aur kaha: "Breathe down to the earth. Bina root ke wealth sirf ek toofan hai."'
   },
   shatter: {
-    micDropQuote: 'Paisa aapko badalta nahi hai; ye sirf ye expose karta hai ki aapka nervous system kitni safety tolerate kar sakta hai bina dissociate hue.',
+    micDropQuote: 'Paisa aapko badalta nahi hai; ye sirf ye expose karta hai ki aapka nervous system kitni safety tolerate kar sakta bina dissociate hue.',
     quotableLines: [
       'Aap wo accumulate nahi kar sakte jise aapki body lethal manti hai.',
       'Aapki financial freedom kabhi aapke root ki depth se zyada nahi badh sakti.',
@@ -364,8 +367,68 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
   ctaLadder: {
     step1_share: 'Agar aapka koi ambitious dost hai jo success aate hi sab sabotage kar deta hai, to aaj hi ye video uske sath share karo.',
     step2_consult: 'Agar aap 60 ghante kaam karne ke baad bhi financial fight-or-flight me phanse hue hain, to niche 1-on-1 Vedic somatic alignment consultation book karein. Hum milkar aapke root container ko rebuild karenge.',
-    step3_nextVideo: 'Iske baad, dekhein: 2 AM Relationship Panic—Kaise Ancestral Karma Heart Chakra ko block karta hai.'
+    step3_nextVideo: 'Iske baad, dekhein: Sudden Relationship Freeze—Kaise Ancestral Karma Heart Chakra ko block karta hai.'
   },
+
+  // 1. StoryBrand (SB7) Hero / Guide CTA Framework (Donald Miller)
+  storyBrandCTA: {
+    hero: 'The viewer dealing with financial panic, sudden success freeze, and unconscious money self-sabotage.',
+    problem: 'External: Bank account swings / impulse spending. Internal: Deep terror of vulnerability when success arrives. Philosophical: Why does working 80 hours a week feel like biological danger instead of peace?',
+    guideRole: 'Nikhil (and you): Grounded practitioner who walked through the same ungrounded panic, understands the Taittiriya Upanishad and somatic root biology, and brings unshakeable Sthira (stability) without moral judgment or toxic positivity.',
+    plan: '1. Book a 1-on-1 Vedic Somatic Consultation -> 2. Diagnose your root blockage & ungrounded Prana -> 3. Rebuild an unshakable nervous system container so abundance stays without panic.',
+    callToAction: 'Book your 1-on-1 Vedic alignment & spiritual healing consultation via the link in the description.',
+    failureAvoided: 'Prevents the exhausting cycle of earning money only to self-sabotage, freezing in high-stakes moments, and burning out in chronic survival fight-or-flight.',
+    successVision: 'Cultivating true Sthira: resting peacefully with money in the bank, knowing your worth is anchored to the Earth and Prakriti, not fluctuating account numbers.',
+    turnBeatRole: 'The Turn beat is where Nakul (the struggling human) shifts attention to the timeless principle, allowing Nikhil to step in not as a bragging hero, but as the empathetic Guide offering a clear roadmap.'
+  },
+
+  // 2. PAS / PASO (Problem - Agitate - Solve - Outcome) Framework for Orbit Content & Shorts
+  pasoOrbitShort: {
+    duration: '60-90s',
+    problem: 'Badi payment account me aate hi celebrate karne ke bajay gala band aur nervous system freeze kyu ho jata hai?',
+    agitate: 'Ye koi budgeting failure nahi hai. Jab aapka nervous system cash hold karne ko danger register karta hai, to aapki body freeze ho jati hai—pair ke talve thande, chest me tight knot, aur dimaag keh raha hai ki catastrophe hone wali hai. Jab tak root hollow hai, har dollar ek live grenade jaisa lagega.',
+    solve: 'Sanatan Dharma me Taittiriya Upanishad iska somatic answer deta hai: Annamaya Kosha & Muladhara Chakra regulation. Krishna ne Gita 2.47 me sikhaya tha ki control chhodkar pehle container ko bake karo.',
+    outcome: 'Aapki spine ko realize hota hai ki account me paisa hone se koi predator nahi aane wala. Chest khulti hai, saans deep hoti hai, aur daulat tikne lagti hai.',
+    softCta: 'Watch the full 14-minute YouTube masterclass breaking down the 3-step grounding ritual. Link in bio.',
+    zeroFabricationVerified: true
+  },
+
+  // 3. ABT (And, But, Therefore) Script-Tightening Diagnostic Test (Randy Olson)
+  abtDiagnostic: {
+    andSetup: 'Nakul worked 80 hours a week to earn 3 lakh rupees, AND by all modern financial standards he should have celebrated his new savings,',
+    butLinchpin: 'BUT the moment the money hit his account, his ungrounded nervous system registered the resources as an existential predator—triggering a daytime car freeze panic and an overwhelming urge to self-sabotage,',
+    thereforeResolution: 'THEREFORE, before chasing more revenue or budgeting apps, he must use the Sanatan practice of Sthira to bake his somatic container so his root can hold abundance without panic.',
+    compressedOneLiner: 'Nakul worked 80 hours a week to earn 3 lakh rupees AND expected peace, BUT the sudden wealth triggered a visceral biological freeze in his car, THEREFORE he must use Vedic grounding to bake his nervous system container before the money burns him.',
+    hasLinchpinContradiction: true,
+    singleIdentifiableProtagonist: 'Nakul (One specific relatable human facing acute payday panic)',
+    diagnosticVerdict: 'Story Engine Validated (Linchpin Found)'
+  },
+
+  // 4. Universal Retention Structure Sanity Check (4-Beat Skeleton)
+  universalRetentionCheck: {
+    reasonToCare: {
+      beat: '00:00 - 00:48 (Daytime car freeze after getting 3 lakh wire)',
+      status: 'pass',
+      note: 'Visceral real-world symptom hook hooks anyone with financial anxiety within 7 seconds.'
+    },
+    movement: {
+      beat: '01:00 - 05:00 (Rapid ping-pong exchanges between Nakul skepticism & Nikhil calm truth)',
+      status: 'pass',
+      note: 'Fast-paced banter prevents monologue stagnation; Nakul challenges every cliché.'
+    },
+    payoff: {
+      beat: '05:15 - 09:30 (Gita 2.47 demystification + Āma Kumbha unbaked clay pot metaphor)',
+      status: 'pass',
+      note: 'Gives concrete, actionable somatic explanation and 3 morning physical rituals.'
+    },
+    ctaLoop: {
+      beat: '10:30 - 11:35 (Sequential Share -> Guide Consultation -> Next Video hook)',
+      status: 'pass',
+      note: 'StoryBrand Guide framing makes 1-on-1 consult the obvious next step for deep work.'
+    },
+    retentionRating: 'Optimal Flow'
+  },
+
   shortScript: {
     duration: '60s',
     hook: 'Paise aate hi shaanti milne ke bajay panic attacks kyu aane lagte hain?',
@@ -376,7 +439,7 @@ export const INITIAL_SCRIPT_PACKAGE: ScriptPackage = {
     softCta: '5-minute somatic reset ke liye YouTube pe mera full masterclass dekhein. Link in bio.'
   },
   editorCaptions: [
-    'The 2 AM Bathroom Floor Panic Attack (Hinglish)',
+    'The Payday Car Freeze Panic Attack (Hinglish)',
     'Kyu Cash aate hi Nervous System Freeze hota hai',
     'Muladhara Chakra & Primal Survival Biology',
     '3-Step Root Sthira Grounding Practice',
@@ -416,7 +479,7 @@ export const INITIAL_SEO_PACKAGE: SEOPackage = {
   youtubeDescription: {
     firstTwoLinesFold: 'Do you feel a sudden wave of panic, chest tightness, or self-sabotage whenever money enters your account? Discover why your nervous system treats cash as danger—and the Vedic somatic reset to heal it.',
     summary: 'In this deep-dive masterclass, we explore why conventional financial advice fails when the root chakra (Muladhara) is trapped in chronic survival mode. You will learn the connection between the Annamaya Kosha (physical body sheath) and money tolerance, plus a daily 5-minute grounding ritual to expand your capacity to hold abundance without fear.',
-    timestampsPlaceholder: `00:00 - The $45,000 Bathroom Floor Panic\n01:45 - The Biology of Money Freeze\n04:20 - Muladhara Chakra: Survival vs Stability\n07:15 - Annamaya Kosha & Nervous System Overload\n10:30 - The 3-Step Morning Grounding Practice\n13:45 - Breaking the Cycle of Panic Spending`,
+    timestampsPlaceholder: `00:00 - The $45,000 Payday Car Freeze Panic\n01:45 - The Biology of Money Freeze\n04:20 - Muladhara Chakra: Survival vs Stability\n07:15 - Annamaya Kosha & Nervous System Overload\n10:30 - The 3-Step Morning Grounding Practice\n13:45 - Breaking the Cycle of Panic Spending`,
     consultationCta: '🌿 Book a 1-on-1 Vedic Life & Energy Consultation: https://dharmacraft.com/consultation?ref=yt-money-freeze',
     wordCount: 185
   },
@@ -499,7 +562,7 @@ export const INITIAL_GROWTH_PLAYBOOK: GrowthPlaybook = {
   preLaunchHype: {
     dayMinus5: {
       type: 'Teaser Reel (15s)',
-      prompt: '"Ever notice you get sick or have a car breakdown the week after your biggest bonus?" Share 15s personal anecdote of the bathroom floor panic.',
+      prompt: '"Ever notice you get sick or have a car breakdown the week after your biggest bonus?" Share 15s personal anecdote of the success freeze.',
       purpose: 'Awaken the latent recognition of the financial self-sabotage cycle.'
     },
     dayMinus3: {

@@ -11,18 +11,26 @@ import {
   Calendar as CalendarIcon,
   Layers,
   Zap,
-  Tag
+  Tag,
+  Flame,
+  TrendingUp,
+  SlidersHorizontal
 } from 'lucide-react';
 import { TopicIdea, DeepResearchBrief, LifeProblemCategory } from '../types';
 import { CATEGORY_LABELS, HINDU_CALENDAR_EVENTS } from '../data/sanatanCalendar';
 import { FlowFooterBar } from './FlowFooterBar';
 import { ActiveModule } from './Navbar';
+import { EngagementIndicator } from './EngagementIndicator';
+import { analyzeEngagementPotential } from '../utils/engagementScorer';
+import { CategorySelect } from './CategorySelect';
+import { useCategories } from '../context/CategoryContext';
 
 interface TopicStudioViewProps {
   topics: TopicIdea[];
   activeTopic: TopicIdea | null;
   onSelectTopic: (topic: TopicIdea) => void;
   onAddTopic: (topic: TopicIdea) => void;
+  onAddTopics?: (topics: TopicIdea[]) => void;
   onNavigateToScript: (topic: TopicIdea) => void;
   onNavigateToCalendar: (topic: TopicIdea) => void;
   onNavigate?: (module: ActiveModule) => void;
@@ -33,22 +41,53 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
   activeTopic,
   onSelectTopic,
   onAddTopic,
+  onAddTopics,
   onNavigateToScript,
   onNavigateToCalendar,
   onNavigate
 }) => {
+  const { getCategoryMeta } = useCategories();
   const [activeMode, setActiveMode] = useState<'mode_a' | 'mode_b'>('mode_a');
   const [userBriefInput, setUserBriefInput] = useState('');
   const [isResearching, setIsResearching] = useState(false);
   const [deepResearchResult, setDeepResearchResult] = useState<DeepResearchBrief | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [engagementSort, setEngagementSort] = useState<'default' | 'highest_engagement' | 'viral_only'>('default');
   const [isGeneratingModeA, setIsGeneratingModeA] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  // Filtered topics for Mode A
-  const filteredTopics = topics.filter(t => {
-    return categoryFilter === 'all' || t.category === categoryFilter;
+  // Filtered & sorted topics for Mode A
+  let filteredTopics = topics.filter(t => {
+    if (categoryFilter !== 'all' && t.category !== categoryFilter) return false;
+    if (engagementSort === 'viral_only') {
+      const analysis = analyzeEngagementPotential(t.hook, t.category, {
+        workingTitle: t.workingTitle,
+        whyNow: t.whyNow,
+        festivalTie: t.festivalTie,
+        bestFormat: t.bestFormat
+      });
+      return analysis.tier === 'Viral Velocity' || analysis.iconCount >= 5;
+    }
+    return true;
   });
+
+  if (engagementSort === 'highest_engagement') {
+    filteredTopics = [...filteredTopics].sort((a, b) => {
+      const scoreA = analyzeEngagementPotential(a.hook, a.category, {
+        workingTitle: a.workingTitle,
+        whyNow: a.whyNow,
+        festivalTie: a.festivalTie,
+        bestFormat: a.bestFormat
+      }).score;
+      const scoreB = analyzeEngagementPotential(b.hook, b.category, {
+        workingTitle: b.workingTitle,
+        whyNow: b.whyNow,
+        festivalTie: b.festivalTie,
+        bestFormat: b.bestFormat
+      }).score;
+      return scoreB - scoreA;
+    });
+  }
 
   // Handle Mode B Deep Research
   const handleRunDeepResearch = async () => {
@@ -157,7 +196,11 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
       if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const data = await res.json();
       if (Array.isArray(data.data) && data.data.length > 0) {
-        data.data.forEach((t: TopicIdea) => onAddTopic(t));
+        if (onAddTopics) {
+          onAddTopics(data.data);
+        } else {
+          data.data.forEach((t: TopicIdea) => onAddTopic(t));
+        }
         setStatusMessage(`Successfully generated ${data.data.length} new trend-driven topic ideas!`);
       }
     } catch (err: any) {
@@ -171,44 +214,56 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded">
+      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 sm:p-6 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded shrink-0 mt-0.5 sm:mt-0">
             M3
           </div>
-          <div>
-            <h1 className="text-xl font-medium tracking-tight text-white">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl font-medium tracking-tight text-white truncate sm:text-clip">
               Module 3: <span className="text-amber-500 font-normal">Topic Studio (Mode A & Mode B)</span>
             </h1>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400 mt-0.5">
               Generating problem-first, curiosity-driven titles rooted in named Sanatan Dharma principles & verified tithis.
             </p>
           </div>
         </div>
 
-        {/* Mode Selector Tabs */}
-        <div className="flex items-center bg-slate-900 p-1 rounded border border-slate-800 overflow-x-auto no-scrollbar w-full sm:w-auto">
+        {/* Mode Selector Tabs & Auto-Pilot Trigger */}
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="flex items-center bg-slate-900 p-1 rounded-lg border border-slate-800 shrink-0">
+            <button
+              id="tab-mode-a"
+              onClick={() => setActiveMode('mode_a')}
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
+                activeMode === 'mode_a'
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className="hidden sm:inline">Mode A: </span>Trend-Driven (20)
+            </button>
+            <button
+              id="tab-mode-b"
+              onClick={() => setActiveMode('mode_b')}
+              className={`px-3 py-1.5 rounded text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
+                activeMode === 'mode_b'
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className="hidden sm:inline">Mode B: </span>Deep Research
+            </button>
+          </div>
+
           <button
-            id="tab-mode-a"
-            onClick={() => setActiveMode('mode_a')}
-            className={`px-3 sm:px-3.5 py-1.5 rounded text-xs font-semibold transition cursor-pointer shrink-0 whitespace-nowrap flex-1 sm:flex-initial text-center ${
-              activeMode === 'mode_a'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                : 'text-slate-400 hover:text-white'
-            }`}
+            id="tab-mode-autopilot"
+            onClick={() => onNavigate('auto_pilot')}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 bg-gradient-to-r from-amber-500/20 to-amber-500/10 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 shrink-0 shadow-xs"
+            title="Input a brief and AI will schedule, script, and package everything"
           >
-            Mode A: Trend-Driven (20 Topics)
-          </button>
-          <button
-            id="tab-mode-b"
-            onClick={() => setActiveMode('mode_b')}
-            className={`px-3 sm:px-3.5 py-1.5 rounded text-xs font-semibold transition cursor-pointer shrink-0 whitespace-nowrap flex-1 sm:flex-initial text-center ${
-              activeMode === 'mode_b'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Mode B: Deep Research
+            <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            <span>⚡ Auto-Pilot Pipeline</span>
           </button>
         </div>
       </div>
@@ -223,22 +278,37 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
       {/* MODE A: Trend-Driven 20 Topics */}
       {activeMode === 'mode_a' && (
         <div className="space-y-6">
-          <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400 font-medium whitespace-nowrap">Filter Category:</span>
-              <select
-                id="mode-a-category-filter"
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="text-xs px-2.5 py-1.5 rounded border border-slate-800 bg-slate-900 text-slate-200 cursor-pointer focus:outline-hidden focus:border-amber-500 w-full sm:w-auto"
-              >
-                <option value="all" className="bg-[#0E1116]">All 5 Life Categories</option>
-                <option value="relationships" className="bg-[#0E1116]">Relationships</option>
-                <option value="money_business" className="bg-[#0E1116]">Money & Business</option>
-                <option value="mental_health" className="bg-[#0E1116]">Mental Health</option>
-                <option value="physical_health" className="bg-[#0E1116]">Physical Health</option>
-                <option value="emotional_health" className="bg-[#0E1116]">Emotional Health</option>
-              </select>
+          <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400 font-medium whitespace-nowrap">Filter Category:</span>
+                <CategorySelect
+                  id="mode-a-category-filter"
+                  value={categoryFilter}
+                  onChange={setCategoryFilter}
+                  includeAllOption
+                  allLabel="All 5 Life Categories"
+                  size="sm"
+                  containerClassName="w-auto min-w-[180px]"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400 font-medium whitespace-nowrap flex items-center gap-1">
+                  <Flame className="w-3.5 h-3.5 text-rose-400" />
+                  Engagement Potential:
+                </span>
+                <select
+                  id="mode-a-engagement-sort"
+                  value={engagementSort}
+                  onChange={(e) => setEngagementSort(e.target.value as any)}
+                  className="text-xs px-2.5 py-1.5 rounded border border-slate-800 bg-slate-900 text-slate-200 cursor-pointer focus:outline-hidden focus:border-amber-500 w-full sm:w-auto font-medium"
+                >
+                  <option value="default" className="bg-[#0E1116]">All Ratings</option>
+                  <option value="highest_engagement" className="bg-[#0E1116]">Highest Potential First (🔥 Top)</option>
+                  <option value="viral_only" className="bg-[#0E1116]">Viral Velocity Only (5/5 Rating)</option>
+                </select>
+              </div>
             </div>
 
             <button
@@ -296,6 +366,21 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
                       <p className="text-slate-500 italic text-[11px]">
                         "{topic.hook}"
                       </p>
+                    </div>
+
+                    {/* Engagement Potential Visual Indicator */}
+                    <div className="pt-1">
+                      <EngagementIndicator
+                        hook={topic.hook}
+                        category={topic.category}
+                        context={{
+                          workingTitle: topic.workingTitle,
+                          whyNow: topic.whyNow,
+                          festivalTie: topic.festivalTie,
+                          bestFormat: topic.bestFormat
+                        }}
+                        showExpandableBreakdown={true}
+                      />
                     </div>
 
                     {topic.festivalTie && (
@@ -419,6 +504,29 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
                 </div>
               </div>
 
+              {/* Engagement Potential Indicator for Mode B */}
+              <div className="p-4 rounded-lg bg-slate-900/60 border border-slate-800 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-slate-200 font-semibold flex items-center gap-1.5">
+                    <Flame className="w-4 h-4 text-rose-400" />
+                    Engagement Potential Rating (Hook & Category Analysis)
+                  </span>
+                  <span className="text-[11px] text-slate-500 font-mono">
+                    Analyzed from Symptom Search & Category Synergy
+                  </span>
+                </div>
+                <EngagementIndicator
+                  hook={deepResearchResult.searchIntent.symptomSearches[0] || deepResearchResult.searchIntent.realPhrasing[0] || 'Stop letting unresolved debt sabotage your peace.'}
+                  category={deepResearchResult.categories[0] || 'emotional_health'}
+                  context={{
+                    workingTitle: deepResearchResult.suggestedWorkingTitle,
+                    whyNow: deepResearchResult.relatedTrendingAngles.connectedEvent,
+                    bestFormat: deepResearchResult.suggestedFormat
+                  }}
+                  showExpandableBreakdown={true}
+                />
+              </div>
+
               {/* 6 Required Research Aspects */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                 {/* 1. Search Intent */}
@@ -497,7 +605,7 @@ export const TopicStudioView: React.FC<TopicStudioViewProps> = ({
                   <div className="flex flex-wrap gap-1.5">
                     {deepResearchResult.categories.map((c) => (
                       <span key={c} className="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-800 text-amber-300 border border-slate-700">
-                        {CATEGORY_LABELS[c]?.label || c}
+                        {getCategoryMeta(c).label}
                       </span>
                     ))}
                   </div>

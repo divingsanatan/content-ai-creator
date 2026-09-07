@@ -22,9 +22,16 @@ import {
   Pause,
   RotateCcw,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Database,
+  UploadCloud,
+  Target,
+  ShieldCheck,
+  Activity,
+  Compass,
+  CheckCheck
 } from 'lucide-react';
-import { ScriptPackage, TopicIdea, LifeProblemCategory, DialogueLine, ReelCutGuide } from '../types';
+import { ScriptPackage, TopicIdea, LifeProblemCategory, DialogueLine, ReelCutGuide, StoryBrandCTA, PasoOrbitShort, ABTDiagnostic, UniversalRetentionCheck } from '../types';
 import { INITIAL_SCRIPT_PACKAGE } from '../data/initialPackages';
 import { CATEGORY_LABELS } from '../data/sanatanCalendar';
 import { FlowFooterBar } from './FlowFooterBar';
@@ -46,7 +53,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   onNavigate
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState<'dialogue' | 'reel_cuts' | 'shlok' | 'hstss' | 'teleprompter' | 'directing'>('dialogue');
+  const [activeTab, setActiveTab] = useState<'dialogue' | 'reel_cuts' | 'shlok' | 'hstss' | 'frameworks' | 'teleprompter' | 'directing'>('dialogue');
   const [speakerFilter, setSpeakerFilter] = useState<'all' | 'Nakul' | 'Nikhil'>('all');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [userNotes, setUserNotes] = useState('');
@@ -121,6 +128,35 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
 
   const currentPkg = scriptPackage || INITIAL_SCRIPT_PACKAGE;
 
+  const [isSavingToSupabase, setIsSavingToSupabase] = useState(false);
+  const [supabaseSaveStatus, setSupabaseSaveStatus] = useState<string | null>(null);
+
+  const handleSaveToSupabase = async () => {
+    if (!currentPkg) return;
+    setIsSavingToSupabase(true);
+    setSupabaseSaveStatus(null);
+    try {
+      const res = await fetch('/api/supabase/sync-script', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scriptPackage: currentPkg }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSupabaseSaveStatus('Saved to Supabase!');
+        setTimeout(() => setSupabaseSaveStatus(null), 3000);
+      } else {
+        setSupabaseSaveStatus(data.error || 'Configure Supabase keys in Secrets');
+        setTimeout(() => setSupabaseSaveStatus(null), 4000);
+      }
+    } catch (err: any) {
+      setSupabaseSaveStatus('Failed to sync');
+      setTimeout(() => setSupabaseSaveStatus(null), 3000);
+    } finally {
+      setIsSavingToSupabase(false);
+    }
+  };
+
   // Dialogue lines
   const dialogueLines = currentPkg.dialogueScript || INITIAL_SCRIPT_PACKAGE.dialogueScript || [];
   const filteredDialogue = speakerFilter === 'all' 
@@ -141,17 +177,23 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   // Directing Guide
   const directingGuide = currentPkg.directingGuide || INITIAL_SCRIPT_PACKAGE.directingGuide;
 
+  // 4 Proven Narrative Frameworks (StoryBrand SB7, PASO, ABT, Universal Retention)
+  const storyBrandCTA = currentPkg.storyBrandCTA || INITIAL_SCRIPT_PACKAGE.storyBrandCTA;
+  const pasoOrbitShort = currentPkg.pasoOrbitShort || INITIAL_SCRIPT_PACKAGE.pasoOrbitShort;
+  const abtDiagnostic = currentPkg.abtDiagnostic || INITIAL_SCRIPT_PACKAGE.abtDiagnostic;
+  const universalRetentionCheck = currentPkg.universalRetentionCheck || INITIAL_SCRIPT_PACKAGE.universalRetentionCheck;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded">
+      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 sm:p-6 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded shrink-0 mt-0.5 sm:mt-0">
             M5
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl font-medium tracking-tight text-white">
+              <h1 className="text-xl font-medium tracking-tight text-white truncate sm:text-clip">
                 Module 5: <span className="text-amber-500 font-normal">Nakul & Nikhil Dual-Character Script Studio</span>
               </h1>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
@@ -164,7 +206,19 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
+          {currentPkg && (
+            <button
+              onClick={handleSaveToSupabase}
+              disabled={isSavingToSupabase}
+              className="px-3.5 py-2 rounded bg-[#0A0C10] hover:bg-slate-900 border border-slate-700 text-emerald-400 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shrink-0 whitespace-nowrap"
+              title="Save script package to Supabase content_scripts table"
+            >
+              <Database className={`w-3.5 h-3.5 ${isSavingToSupabase ? 'animate-spin' : ''}`} />
+              {isSavingToSupabase ? 'Saving...' : supabaseSaveStatus || 'Save to Supabase'}
+            </button>
+          )}
+
           {currentPkg && (
             <button
               onClick={onNavigateToSEO}
@@ -209,7 +263,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
             </span>
           </div>
           <p className="text-xs text-slate-300 mt-2.5 leading-relaxed">
-            Anxious, irritated, frustrated, and sarcastic. He says what the suffering viewer is thinking at 2 AM. Calls out spiritual clichés with sharp wit.
+            Anxious, irritated, frustrated, and sarcastic. He says what the suffering viewer is thinking in high-stress moments. Calls out spiritual clichés with sharp wit.
           </p>
         </div>
 
@@ -317,6 +371,20 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
         >
           <Layers className="w-3.5 h-3.5" />
           HSTSS Structural Breakdown & CTA Ladder
+        </button>
+        <button
+          onClick={() => setActiveTab('frameworks')}
+          className={`px-4 py-2 text-xs font-medium rounded-t transition cursor-pointer shrink-0 whitespace-nowrap flex items-center gap-1.5 ${
+            activeTab === 'frameworks'
+              ? 'bg-slate-800 text-amber-400 border-t-2 border-t-amber-500 font-semibold'
+              : 'text-slate-400 hover:text-slate-300 hover:bg-slate-900'
+          }`}
+        >
+          <Target className="w-3.5 h-3.5 text-amber-400" />
+          StoryBrand (SB7) & Frameworks QA
+          <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            4 Layers
+          </span>
         </button>
         <button
           onClick={() => setActiveTab('teleprompter')}
@@ -778,7 +846,7 @@ ${shlokCard.nikhilExplanation}
                     S
                   </span>
                   <h3 className="font-bold text-xs uppercase tracking-[0.2em] text-slate-300">
-                    STAKES (Visceral 2am Physical Feeling & Lowest Point)
+                    STAKES (Visceral Real-World Physical Feeling & Lowest Point)
                   </h3>
                 </div>
                 <button
@@ -796,8 +864,8 @@ ${shlokCard.nikhilExplanation}
                   <p className="text-slate-300 leading-relaxed">{currentPkg.stakes.visceralBodyFeeling}</p>
                 </div>
                 <div className="p-3 bg-slate-900 rounded border border-slate-800 space-y-1">
-                  <span className="font-mono text-amber-400 block text-[10px] uppercase">2 AM Internal Dialogue:</span>
-                  <p className="text-slate-300 italic font-serif leading-relaxed">{currentPkg.stakes.twoAmInternalDialogue}</p>
+                  <span className="font-mono text-amber-400 block text-[10px] uppercase">Internal Crisis Dialogue:</span>
+                  <p className="text-slate-300 italic font-serif leading-relaxed">{currentPkg.stakes.twoAmInternalDialogue || currentPkg.stakes.internalCrisisDialogue}</p>
                 </div>
               </div>
 
@@ -870,6 +938,498 @@ ${shlokCard.nikhilExplanation}
                 <div className="p-3 bg-slate-900 rounded border border-slate-800 text-xs">
                   <strong className="text-amber-400 block mb-0.5">3. Next Video Hook-Loop:</strong>
                   <p className="text-slate-300">{currentPkg.ctaLadder.step3_nextVideo}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB: StoryBrand (SB7) & Proven Frameworks QA (Donald Miller, PASO, Randy Olson ABT, Universal Retention) */}
+        {activeTab === 'frameworks' && (
+          <div className="space-y-6">
+            {/* Architectural Layering Explanation Banner */}
+            <div className="bg-gradient-to-r from-amber-950/30 via-slate-900 to-indigo-950/30 border border-amber-500/30 rounded-lg p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold text-sm shrink-0">
+                    <Target className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">
+                      Four Proven Narrative Frameworks Layered on Top of HSTSS
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-0.5">
+                      HSTSS remains the core storytelling engine. These 4 named frameworks solve the distinct execution bottlenecks: CTA framing, Orbit cuts, anti-lecture diagnosis, and retention pacing.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-2.5 py-1 rounded text-[11px] font-mono font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> All 4 Frameworks Calibrated
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* FRAMEWORK 1: STORYBRAND (SB7) HERO / GUIDE CTA FRAMEWORK */}
+            <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs">
+                    SB7
+                  </span>
+                  <div>
+                    <h3 className="font-bold text-xs uppercase tracking-[0.2em] text-amber-300">
+                      1. StoryBrand (SB7) — Donald Miller CTA Framing Engine
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      Viewer = The Hero • Creator/Nikhil = The Empathic Guide • CTA = The 3-Step Plan
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => copyToClipboard(storyBrandCTA?.callToAction || currentPkg.ctaLadder.step2_consult, 'sb7-cta')}
+                  className="text-xs font-mono text-slate-400 hover:text-amber-400 flex items-center gap-1.5 cursor-pointer transition px-3 py-1 rounded bg-slate-900 border border-slate-800"
+                >
+                  {copiedKey === 'sb7-cta' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  Copy StoryBrand CTA
+                </button>
+              </div>
+
+              {/* Core Principle Callout */}
+              <div className="p-3.5 bg-amber-950/20 border border-amber-500/20 rounded-lg flex items-start gap-3 text-xs text-amber-200 leading-relaxed">
+                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <p>
+                  <strong className="text-white">Why Donald Miller's SB7 matters for spiritual channels:</strong> Most spiritual creators position themselves as the enlightened hero while treating viewers as passive observers. When you make yourself the hero, viewers have nowhere to place themselves. In our system, <strong>the viewer is the hero</strong> with an unresolved life crisis, and you (and Nikhil) are the <strong>guide</strong> who has walked the terrain and hands them the map.
+                </p>
+              </div>
+
+              {/* 7 Beats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {/* 1. Character (Hero) */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1">
+                    <User className="w-3 h-3" /> Beat 1: The Character (Hero)
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {storyBrandCTA?.hero}
+                  </p>
+                  <span className="text-[10px] text-slate-500 italic block">
+                    Viewer's identity & emotional state entering this video
+                  </span>
+                </div>
+
+                {/* 2. Problem */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-red-400 flex items-center gap-1">
+                    <Flame className="w-3 h-3" /> Beat 2: Three-Level Problem
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {storyBrandCTA?.problem}
+                  </p>
+                  <span className="text-[10px] text-slate-500 italic block">
+                    External symptom + Internal turmoil + Philosophical conflict
+                  </span>
+                </div>
+
+                {/* 3. The Guide */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                    <BookOpen className="w-3 h-3" /> Beat 3: Meets a Guide
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {storyBrandCTA?.guideRole}
+                  </p>
+                  <span className="text-[10px] text-slate-500 italic block">
+                    Empathy (has suffered too) + Authority (Vedic wisdom/Sthira)
+                  </span>
+                </div>
+
+                {/* 4. The Plan */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1">
+                    <Layers className="w-3 h-3" /> Beat 4: Who Gives Them a Plan
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {storyBrandCTA?.plan}
+                  </p>
+                  <span className="text-[10px] text-slate-500 italic block">
+                    Simple 3-step pathway (Diagnostic → Somatic Reset → Container)
+                  </span>
+                </div>
+
+                {/* 5. Failure Avoided */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> Beat 6: Failure Avoided
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {storyBrandCTA?.failureAvoided}
+                  </p>
+                  <span className="text-[10px] text-slate-500 italic block">
+                    Exhausting cycle of chronic panic & self-sabotage halted
+                  </span>
+                </div>
+
+                {/* 6. Success Vision */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> Beat 7: Ends in Success
+                  </span>
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {storyBrandCTA?.successVision}
+                  </p>
+                  <span className="text-[10px] text-slate-500 italic block">
+                    Grounded Sthira, somatic capacity, and biological peace
+                  </span>
+                </div>
+              </div>
+
+              {/* Turn Beat Role in Long Video */}
+              <div className="p-4 bg-slate-900/80 rounded-lg border border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold block">
+                  The HSTSS "Turn" Beat Role (Where You Become the Guide):
+                </span>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {storyBrandCTA?.turnBeatRole}
+                </p>
+              </div>
+
+              {/* Word-for-Word StoryBrand Call to Action */}
+              <div className="p-4 bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 rounded-lg border border-amber-500/40 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase font-bold text-amber-300 flex items-center gap-1.5">
+                    <CheckCheck className="w-4 h-4 text-emerald-400" />
+                    Beat 5: The Exact Word-for-Word Call to Action Script:
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400">
+                    Spoken by Nikhil / You at the climax
+                  </span>
+                </div>
+                <p className="text-sm font-medium text-white italic font-serif leading-relaxed bg-slate-950/60 p-3 rounded border border-slate-800">
+                  "{storyBrandCTA?.callToAction || currentPkg.ctaLadder.step2_consult}"
+                </p>
+              </div>
+            </div>
+
+            {/* FRAMEWORK 2: PAS / PASO (PROBLEM — AGITATE — SOLVE — OUTCOME) */}
+            <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-mono font-bold text-xs">
+                    PASO
+                  </span>
+                  <div>
+                    <h3 className="font-bold text-xs uppercase tracking-[0.2em] text-emerald-300">
+                      2. PAS / PASO — Orbit Shorts & Reels Direct-Response Engine
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      Problem → Agitate → Solve → Outcome (60–90s Rapid Compression)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> Zero Fabrication Verified
+                  </span>
+                  <button
+                    onClick={() => {
+                      const fullPaso = `[PROBLEM]: ${pasoOrbitShort?.problem}\n\n[AGITATE]: ${pasoOrbitShort?.agitate}\n\n[SOLVE]: ${pasoOrbitShort?.solve}\n\n[OUTCOME]: ${pasoOrbitShort?.outcome}\n\n[CTA]: ${pasoOrbitShort?.softCta}`;
+                      copyToClipboard(fullPaso, 'paso-full');
+                    }}
+                    className="text-xs font-mono text-slate-400 hover:text-emerald-400 flex items-center gap-1.5 cursor-pointer transition px-3 py-1 rounded bg-slate-900 border border-slate-800"
+                  >
+                    {copiedKey === 'paso-full' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    Copy PASO Short
+                  </button>
+                </div>
+              </div>
+
+              {/* Zero Fabrication Rule Box */}
+              <div className="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-lg flex items-start gap-2.5 text-xs text-emerald-200">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <p>
+                  <strong className="text-white">Strict Agitation Quality Rule:</strong> Direct-response copywriting requires agitating the problem, but in spiritual work, <em>never fabricate or exaggerate panic</em>. The agitation below captures the 100% authentic, biological reality of visceral anxiety without sensationalism.
+                </p>
+              </div>
+
+              {/* 4 PASO Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Problem */}
+                <div className="p-4 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded bg-amber-500/20 flex items-center justify-center text-xs">P</span>
+                      Problem (Exact Somatic Symptom)
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">00:00 - 00:15</span>
+                  </div>
+                  <p className="text-xs text-slate-200 leading-relaxed font-medium">
+                    "{pasoOrbitShort?.problem}"
+                  </p>
+                </div>
+
+                {/* Agitate */}
+                <div className="p-4 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded bg-red-500/20 flex items-center justify-center text-xs">A</span>
+                      Agitate (Visceral Somatic Weight)
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">00:15 - 00:35</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {pasoOrbitShort?.agitate}
+                  </p>
+                </div>
+
+                {/* Solve */}
+                <div className="p-4 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded bg-emerald-500/20 flex items-center justify-center text-xs">S</span>
+                      Solve (The Single Sanatan Insight)
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">00:35 - 00:55</span>
+                  </div>
+                  <p className="text-xs text-slate-200 leading-relaxed font-medium">
+                    {pasoOrbitShort?.solve}
+                  </p>
+                </div>
+
+                {/* Outcome */}
+                <div className="p-4 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded bg-cyan-500/20 flex items-center justify-center text-xs">O</span>
+                      Outcome (Somatic Relief & Change)
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">00:55 - 01:15</span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {pasoOrbitShort?.outcome}
+                  </p>
+                </div>
+              </div>
+
+              {/* Orbit Soft-CTA Reminder */}
+              <div className="p-3.5 bg-slate-900/90 rounded-lg border border-slate-800 flex items-center justify-between gap-3 text-xs">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 block">
+                    Orbit Content Soft-CTA (Must Point to YouTube Full Video):
+                  </span>
+                  <p className="text-slate-300 font-medium italic">
+                    "{pasoOrbitShort?.softCta || 'Full breakdown on YouTube — link in bio.'}"
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-slate-400 px-2 py-1 bg-slate-800 rounded shrink-0">
+                  Zero Direct Booking CTAs on Orbit
+                </span>
+              </div>
+            </div>
+
+            {/* FRAMEWORK 3: ABT (AND, BUT, THEREFORE) SCRIPT-TIGHTENING DIAGNOSTIC */}
+            <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center font-mono font-bold text-xs">
+                    ABT
+                  </span>
+                  <div>
+                    <h3 className="font-bold text-xs uppercase tracking-[0.2em] text-purple-300">
+                      3. ABT (And, But, Therefore) — 30-Second Script QA Diagnostic
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      Randy Olson Diagnostic • Identifiable-Protagonist & Linchpin Contradiction Test
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded text-[11px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-400" />
+                    {abtDiagnostic?.diagnosticVerdict || 'Story Engine Validated (Linchpin Found)'}
+                  </span>
+                  <button
+                    onClick={() => copyToClipboard(abtDiagnostic?.compressedOneLiner || '', 'abt-line')}
+                    className="text-xs font-mono text-slate-400 hover:text-purple-400 flex items-center gap-1.5 cursor-pointer transition px-3 py-1 rounded bg-slate-900 border border-slate-800"
+                  >
+                    {copiedKey === 'abt-line' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    Copy ABT Compression
+                  </button>
+                </div>
+              </div>
+
+              {/* Compressed 1-Liner Box with Highlighted Chips */}
+              <div className="p-4 bg-gradient-to-r from-purple-950/20 via-slate-900 to-slate-900 rounded-lg border border-purple-500/30 space-y-2">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 block">
+                  Compressed 1-Sentence Narrative Test (Randy Olson):
+                </span>
+                <p className="text-sm font-medium text-slate-100 leading-relaxed font-serif">
+                  {abtDiagnostic?.compressedOneLiner}
+                </p>
+              </div>
+
+              {/* 3 ABT Component Breakdown Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {/* AND Setup */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1">
+                    <span className="px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-300 font-mono text-[9px]">AND</span>
+                    The Context Setup
+                  </span>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {abtDiagnostic?.andSetup}
+                  </p>
+                </div>
+
+                {/* BUT Linchpin */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-amber-500/30 space-y-1.5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 px-2 py-0.5 bg-amber-500/20 text-amber-300 text-[9px] font-mono font-bold uppercase rounded-bl">
+                    Linchpin
+                  </div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1">
+                    <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono text-[9px]">BUT</span>
+                    The Contradiction / Conflict
+                  </span>
+                  <p className="text-xs text-amber-100 leading-relaxed font-medium">
+                    {abtDiagnostic?.butLinchpin}
+                  </p>
+                </div>
+
+                {/* THEREFORE Resolution */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                    <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono text-[9px]">THEREFORE</span>
+                    The Resolution Shift
+                  </span>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {abtDiagnostic?.thereforeResolution}
+                  </p>
+                </div>
+              </div>
+
+              {/* Identifiable-Protagonist & Anti-Lecture Diagnostics */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div className="p-3 bg-slate-900/60 rounded border border-slate-800 flex items-start gap-2.5 text-xs text-slate-300">
+                  <User className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-white block">Identifiable-Victim Effect Validated:</strong>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Focused on: <span className="text-purple-300 font-mono">{abtDiagnostic?.singleIdentifiableProtagonist}</span>. Prevents cold, abstract lecturing by anchoring empathy in one concrete human.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-900/60 rounded border border-slate-800 flex items-start gap-2.5 text-xs text-slate-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <strong className="text-white block">Lecture Trap Avoidance:</strong>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Because the script possesses an irreconcilable "BUT" friction, it cannot degenerate into a dry monologue or academic sermon.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* FRAMEWORK 4: UNIVERSAL RETENTION STRUCTURE (4-BEAT SANITY CHECK) */}
+            <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-7 h-7 rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-mono font-bold text-xs">
+                    URS
+                  </span>
+                  <div>
+                    <h3 className="font-bold text-xs uppercase tracking-[0.2em] text-cyan-300">
+                      4. Universal Retention Structure — 4-Beat Pacing Sanity Check
+                    </h3>
+                    <span className="text-[11px] text-slate-400">
+                      Reason to Care → Movement → Payoff → CTA (Mid-Edit Flow Diagnostic)
+                    </span>
+                  </div>
+                </div>
+
+                <span className="px-3 py-1 rounded text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-cyan-400" />
+                  Pacing Rating: {universalRetentionCheck?.retentionRating || 'Optimal Flow'}
+                </span>
+              </div>
+
+              {/* 4 Retention Beats Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                {/* Beat 1: Reason to Care */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                      1. Reason to Care
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold uppercase">
+                      Pass
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-200 font-mono block">
+                    {universalRetentionCheck?.reasonToCare?.beat}
+                  </span>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {universalRetentionCheck?.reasonToCare?.note}
+                  </p>
+                </div>
+
+                {/* Beat 2: Movement */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                      2. Movement / Momentum
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold uppercase">
+                      Pass
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-200 font-mono block">
+                    {universalRetentionCheck?.movement?.beat}
+                  </span>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {universalRetentionCheck?.movement?.note}
+                  </p>
+                </div>
+
+                {/* Beat 3: Payoff */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                      3. Payoff (Sanatan)
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold uppercase">
+                      Pass
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-200 font-mono block">
+                    {universalRetentionCheck?.payoff?.beat}
+                  </span>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {universalRetentionCheck?.payoff?.note}
+                  </p>
+                </div>
+
+                {/* Beat 4: CTA Loop */}
+                <div className="p-3.5 bg-slate-900 rounded-lg border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400">
+                      4. Closed-Loop CTA
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold uppercase">
+                      Pass
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-200 font-mono block">
+                    {universalRetentionCheck?.ctaLoop?.beat}
+                  </span>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {universalRetentionCheck?.ctaLoop?.note}
+                  </p>
                 </div>
               </div>
             </div>

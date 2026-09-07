@@ -90,7 +90,7 @@ export const PinterestStudioView: React.FC<PinterestStudioViewProps> = ({
               style: "warm photo-realistic",
               imagePrompt: "A warm photo-realistic image of bare feet grounded on cool temple flagstones with fallen frangipani blossoms and morning sunlight casting soft geometric shadows, in a color palette of warm golden dawn, stone gray, and deep marigold orange, with space at the top/bottom for text overlay, vertical 2:3 ratio, no readable text in the image itself.",
               overlayText: "The 7-Minute Evening Earth Grounding Ritual",
-              pinTitle: "How to Stop 2am Financial Stress Naturally (Vedic Grounding)",
+              pinTitle: "How to Stop Sudden Financial Stress Naturally (Vedic Grounding)",
               isProblemLedTitle: true,
               pinDescription: "If late-night panic keeps you awake, stop trying to spreadsheet away your fear. Reset your prana vayu with this evening somatic practice from ancient Vedic texts. Watch the step-by-step masterclass on YouTube — link in bio.",
               suggestedBoard: "Evening Healing Rituals",
@@ -117,22 +117,22 @@ export const PinterestStudioView: React.FC<PinterestStudioViewProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded">
+      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 sm:p-6 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded shrink-0 mt-0.5 sm:mt-0">
             M7
           </div>
-          <div>
-            <h1 className="text-xl font-medium tracking-tight text-white">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl font-medium tracking-tight text-white truncate sm:text-clip">
               Module 7: <span className="text-amber-500 font-normal">Pinterest Studio & Exact Prompt Formulator</span>
             </h1>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400 mt-0.5">
               Exact Formula: "A [style] image of [subject], in a color palette of [colors], with space at top/bottom, 2:3 ratio, no readable text".
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
           {currentPkg && (
             <button
               onClick={onNavigateToGrowth}

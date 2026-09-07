@@ -26,10 +26,10 @@ export const INITIAL_TRENDS: TrendItem[] = [
   {
     id: 'trend-google-1',
     platform: 'Google Search',
-    trendTerm: 'waking up at 3am heart pounding spiritual meaning vs anxiety',
+    trendTerm: 'sudden afternoon chest tightness freeze spiritual meaning vs anxiety',
     category: 'mental_health',
-    intent: 'Sufferer experiencing nocturnal panic attacks / palpitations and wondering if it is spiritual awakening, kundalini, or clinical panic.',
-    contentAngle: 'Ayurvedic Vata dosha hour (2am-6am) + Pitta liver heat; combined with Ajna/Sahasrara prana overstimulation from ungrounded bedtime doomscrolling. Grounding with Padabhyanga (warm sesame oil on feet) and Pranayama.',
+    intent: 'Sufferer experiencing sudden panic attacks / palpitations under pressure and wondering if it is spiritual awakening, kundalini, or clinical panic.',
+    contentAngle: 'Ayurvedic Vata dosha imbalance + Pitta liver heat; combined with Ajna/Sahasrara prana overstimulation from ungrounded work stress. Grounding with Padabhyanga (warm sesame oil on feet) and Pranayama.',
     gap: 'Creators either completely spiritualize medical anxiety (dangerous) or dismiss the spiritual connection; need grounded psychosomatic distinction and grounding rituals that complement therapy.',
     urgency: 'high',
     searchVolumeEstimate: '+85% monthly spike'
@@ -154,7 +154,7 @@ export const INITIAL_TOPICS: TopicIdea[] = [
   },
   {
     id: 'topic-2',
-    workingTitle: 'The 2am Relationship Anxiety You Inherited From Ancestors',
+    workingTitle: 'The Silent Relationship Freeze You Inherited From Ancestors',
     category: 'relationships',
     concept: 'Pitru Karma & Intergenerational Runanubandha',
     whyNow: 'Tied to upcoming Bhadrapada Amavasya & Pitru Paksha cycle',
@@ -170,17 +170,17 @@ export const INITIAL_TOPICS: TopicIdea[] = [
   },
   {
     id: 'topic-3',
-    workingTitle: 'Waking Up at 3am with Heart Racing: The Vata-Heart Reset',
+    workingTitle: 'Sudden Workday Panic and Freeze: The Vata-Heart Reset',
     category: 'mental_health',
     concept: 'Ayurvedic Vata Kala & Anahata Prana grounding (Padabhyanga)',
     whyNow: 'Trending search term across Google & Reddit health anxiety forums (+85%)',
     bestFormat: 'long-form YouTube',
-    hook: 'Waking up between 2am and 4am with a racing heart isn\'t a spiritual awakening — it\'s your nervous system begging for this ancient bedtime ritual.',
+    hook: 'Freezing up with a racing heart during your biggest moments isn\'t a mindset failure — it\'s your nervous system begging for this ancient grounding ritual.',
     festivalTie: {
       eventName: 'Aja Ekadashi',
       tithiOrDate: '2026-09-07',
       isVerified: true,
-      reasoning: 'Ekadashi fasting and mental detox naturally pairs with nocturnal nervous system recovery.'
+      reasoning: 'Ekadashi fasting and mental detox naturally pairs with nervous system recovery.'
     },
     status: 'scripted'
   },
@@ -237,31 +237,7 @@ export const INITIAL_TOPICS: TopicIdea[] = [
 ];
 
 export const INITIAL_CALENDAR: CalendarItem[] = [
-  // --- WEEK 1 (Sep 06 - Sep 12): Root Chakra & Money Panic ---
-  {
-    id: 'cal-w1-hype',
-    date: '2026-09-04',
-    dayOfWeek: 'Friday',
-    platform: 'Meta/Stories',
-    contentType: 'Pre-Launch Hype',
-    title: 'Teaser Reel: "This Sunday, why having money makes your body panic"',
-    category: 'money_business',
-    status: 'Scheduled',
-    parentLongformId: 'cal-w1-pillar',
-    notes: 'Day -2 hype before Sunday main drop. Curiosity hook without giving answer.'
-  },
-  {
-    id: 'cal-w1-pillar',
-    date: '2026-09-06',
-    dayOfWeek: 'Sunday',
-    festivalOrTithi: 'Leading into Aja Ekadashi',
-    platform: 'YouTube',
-    contentType: 'Long-form Video',
-    title: 'Why You Freeze When You Get Money: Healing Root Panic',
-    category: 'money_business',
-    status: 'Scripted',
-    notes: '🏆 WEEK 1 PILLAR VIDEO (12-15 min). Full HSTSS script with CTA ladder to consulting.'
-  },
+  // --- WEEK 1 (Sep 07 - Sep 13): Friday YouTube Anchor Drop (Sept 11th) ---
   {
     id: 'cal-w1-reel1',
     date: '2026-09-07',
@@ -269,320 +245,347 @@ export const INITIAL_CALENDAR: CalendarItem[] = [
     festivalOrTithi: 'Aja Ekadashi',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #1: The $45,000 Bathroom Floor Panic (Hook Slice)',
+    title: 'Reel 1: The $45k Afternoon Payday Freeze (Hook Cut)',
     category: 'money_business',
-    status: 'Scripted',
+    status: 'Scheduled',
     parentLongformId: 'cal-w1-pillar',
-    notes: 'Funnel CTA: Full breakdown on YouTube — link in bio (never consult direct).'
-  },
-  {
-    id: 'cal-w1-pin1',
-    date: '2026-09-08',
-    dayOfWeek: 'Tuesday',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 1: 4 Somatic Signs Your Root Chakra is Burning Money',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w1-pillar',
-    notes: 'Soft watercolor style with warm terracotta palette. Link to YouTube.'
-  },
-  {
-    id: 'cal-w1-carousel',
-    date: '2026-09-09',
-    dayOfWeek: 'Wednesday',
-    platform: 'Instagram/Facebook',
-    contentType: 'Carousel',
-    title: 'Carousel (7 Slides): Why Budgeting & Willpower Fail in Survival Mode',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w1-pillar',
-    notes: '7 slides breaking down Annamaya Kosha nervous system freeze. Saves & shares driver.'
+    notes: 'Cut from Sept 11 main video: Nakul pacing in parking lot after contract signing. Soft CTA: Full video drops Friday on YouTube.'
   },
   {
     id: 'cal-w1-reel2',
+    date: '2026-09-08',
+    dayOfWeek: 'Tuesday',
+    festivalOrTithi: 'Post-Ekadashi Parana',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 2: Nakul vs Nikhil - Why Budgeting Won\'t Fix Root Fear (Dialogue Cut)',
+    category: 'money_business',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w1-pillar',
+    notes: 'Cut from Sept 11 main video: Clash between surface advice and deep Muladhara survival fear. Drops Friday on YouTube.'
+  },
+  {
+    id: 'cal-w1-reel3',
+    date: '2026-09-09',
+    dayOfWeek: 'Wednesday',
+    festivalOrTithi: 'Pradosh Vrat',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 3: 3 Somatic Shifts to Unfreeze Your Nervous System (Body Cut)',
+    category: 'money_business',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w1-pillar',
+    notes: 'Cut from Sept 11 main video: Annamaya Kosha pelvic grounding and diaphragmatic reset. Coming Friday to YouTube.'
+  },
+  {
+    id: 'cal-w1-reel4',
     date: '2026-09-10',
     dayOfWeek: 'Thursday',
     festivalOrTithi: 'Pre-Bhadrapada Amavasya',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #2: You Sabotage Money Because Your Body Feels Unsafe (Shatter)',
+    title: 'Reel 4: Ancient Shlok Resolution - Gita 2.47 in 50 Seconds (Pre-Release Cut)',
     category: 'money_business',
-    status: 'Idea',
+    status: 'Scheduled',
     parentLongformId: 'cal-w1-pillar',
-    notes: 'Mindset reframing: You cannot accumulate what your body perceives as lethal.'
+    notes: 'Cut from Sept 11 main video: Sanskrit chanting by Nikhil with modern corporate reframing. Tomorrow: Full 14-min Masterclass!'
   },
   {
-    id: 'cal-w1-pin2',
+    id: 'cal-w1-pillar',
     date: '2026-09-11',
     dayOfWeek: 'Friday',
-    festivalOrTithi: 'Bhadrapada Amavasya',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 2: 5-Minute Morning Reset for Financial Panic & Root Chakra',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w1-pillar',
-    notes: 'Step-by-step checklist pin linking directly to YouTube long-form masterclass.'
-  },
-  {
-    id: 'cal-w1-community',
-    date: '2026-09-12',
-    dayOfWeek: 'Saturday',
-    platform: 'YouTube',
-    contentType: 'Community Q&A',
-    title: 'Community Poll: What physical sensation hits when you check your bank balance?',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w1-pillar',
-    notes: 'Audience language mining in YouTube comments + teaser for next week.'
-  },
-
-  // --- WEEK 2 (Sep 13 - Sep 19): Vata Dosha & 3 AM Panic ---
-  {
-    id: 'cal-w2-pillar',
-    date: '2026-09-13',
-    dayOfWeek: 'Sunday',
-    festivalOrTithi: 'Pre-Ganesh Chaturthi Window',
+    festivalOrTithi: 'Bhadrapada Amavasya (Pithori Amavasya)',
     platform: 'YouTube',
     contentType: 'Long-form Video',
-    title: 'Waking Up at 3am with Heart Racing: The Vata-Heart Reset',
-    category: 'mental_health',
-    status: 'Idea',
-    notes: '🏆 WEEK 2 PILLAR VIDEO (12-15 min). Addresses surging nocturnal anxiety search queries.'
+    title: 'Why You Freeze When You Get Money: Healing Root Panic',
+    category: 'money_business',
+    status: 'Scheduled',
+    notes: '🏆 WEEK 1 YOUTUBE PILLAR ANCHOR (14 min). Masterclass featuring Nakul & Nikhil dynamic dialogue, Gita 2.47 grounding, and full consultation CTA ladder.'
   },
+  {
+    id: 'cal-w1-quora1',
+    date: '2026-09-12',
+    dayOfWeek: 'Saturday',
+    festivalOrTithi: 'Shani Amavasya Eve',
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Answering "Why do I feel intense panic and anxiety right after getting paid?"',
+    category: 'money_business',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w1-pillar',
+    notes: 'Weekend Quora distribution: High-intent answer explaining somatic survival freeze, providing actionable takeaways, and embedding link to the Friday YouTube video.'
+  },
+  {
+    id: 'cal-w1-quora2',
+    date: '2026-09-13',
+    dayOfWeek: 'Sunday',
+    festivalOrTithi: 'Shani Amavasya (Sanatan Grounding)',
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Deep-Dive Case Study on Muladhara Survival Freeze & Reconditioning the Nervous System',
+    category: 'money_business',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w1-pillar',
+    notes: 'Weekend Quora distribution: Long-tail authority post on "Can nervous system regulation heal financial self-sabotage?", routing readers to Friday\'s YouTube anchor.'
+  },
+
+  // --- WEEK 2 (Sep 14 - Sep 20): Friday YouTube Anchor Drop (Sept 18th) ---
   {
     id: 'cal-w2-reel1',
     date: '2026-09-14',
     dayOfWeek: 'Monday',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #1: Why 3am Waking Up Isn\'t Just Anxiety (It\'s Vata Peak)',
+    title: 'Reel 1: Sudden Workday Panic in High-Stakes Meetings (Hook Cut)',
     category: 'mental_health',
-    status: 'Idea',
+    status: 'Scheduled',
     parentLongformId: 'cal-w2-pillar',
-    notes: 'Ayurvedic circadian clock hook: 2am-6am is Vata time. Link in bio to YouTube.'
-  },
-  {
-    id: 'cal-w2-pin1',
-    date: '2026-09-15',
-    dayOfWeek: 'Tuesday',
-    festivalOrTithi: 'Ganesh Chaturthi',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 1: The 3am Adrenaline Clock & Nervous System Guide',
-    category: 'mental_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w2-pillar',
-    notes: '2:3 Infographic diagram with somatic nervous system reset steps.'
-  },
-  {
-    id: 'cal-w2-carousel',
-    date: '2026-09-16',
-    dayOfWeek: 'Wednesday',
-    platform: 'Instagram/Facebook',
-    contentType: 'Carousel',
-    title: 'Carousel (6 Slides): 3 Ayurvedic Evening Habits Preventing 3am Panic',
-    category: 'physical_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w2-pillar',
-    notes: 'Warm sesame oil foot massage, nutmeg warm milk, and digital detox.'
+    notes: 'Cut from Sep 18 main video: Nakul describing sudden chest tightness during afternoon presentation. Full video Friday on YouTube.'
   },
   {
     id: 'cal-w2-reel2',
+    date: '2026-09-15',
+    dayOfWeek: 'Tuesday',
+    festivalOrTithi: 'Ganesh Chaturthi (Vinayaka Chavithi)',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 2: Nakul vs Nikhil - The Vata Spike Explained (Dialogue Cut)',
+    category: 'mental_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w2-pillar',
+    notes: 'Cut from Sep 18 main video: Why talk therapy fails when the nervous system enters Vata fight-or-flight. Friday on YouTube.'
+  },
+  {
+    id: 'cal-w2-reel3',
+    date: '2026-09-16',
+    dayOfWeek: 'Wednesday',
+    festivalOrTithi: 'Rishi Panchami',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 3: The 3-Minute Vata-Heart Somatic Reset (Body Cut)',
+    category: 'mental_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w2-pillar',
+    notes: 'Cut from Sep 18 main video: Padabhyanga and Anahata grounding technique for immediate boardroom relief. Friday on YouTube.'
+  },
+  {
+    id: 'cal-w2-reel4',
     date: '2026-09-17',
     dayOfWeek: 'Thursday',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #2: Why Talk Therapy Can\'t Stop a 3am Somatic Spike',
+    title: 'Reel 4: Ancient Wisdom for Corporate Survival (Pre-Release Cut)',
     category: 'mental_health',
-    status: 'Idea',
+    status: 'Scheduled',
     parentLongformId: 'cal-w2-pillar',
-    notes: 'Contrast cognitive approaches with somatic Vata balancing.'
+    notes: 'Cut from Sep 18 main video: Nikhil chanting the Prana Sukta grounding shlok. Full video drops tomorrow!'
   },
   {
-    id: 'cal-w2-pin2',
+    id: 'cal-w2-pillar',
     date: '2026-09-18',
     dayOfWeek: 'Friday',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 2: Nighttime Grounding Ritual for Sensitive Empaths',
-    category: 'emotional_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w2-pillar'
+    platform: 'YouTube',
+    contentType: 'Long-form Video',
+    title: 'Sudden Workday Panic and Freeze: The Vata-Heart Reset',
+    category: 'mental_health',
+    status: 'Scheduled',
+    notes: '🏆 WEEK 2 YOUTUBE PILLAR ANCHOR (13 min). Full dual-character breakdown on corporate anxiety and somatic regulation with consultation CTA.'
   },
   {
-    id: 'cal-w2-hype',
+    id: 'cal-w2-quora1',
     date: '2026-09-19',
     dayOfWeek: 'Saturday',
-    platform: 'Meta/Stories',
-    contentType: 'Pre-Launch Hype',
-    title: 'Story Poll: "Do you attract partners you have to mother and fix?"',
-    category: 'relationships',
-    status: 'Idea',
-    notes: 'Teaser sticker poll building hype for Week 3 Sunday Relationship Pillar.'
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Answering "Why do I get chest tightness and breath-holding in office meetings?"',
+    category: 'mental_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w2-pillar',
+    notes: 'Weekend Quora marketing: High-intent answers routing corporate professionals to the Friday YouTube video.'
   },
-
-  // --- WEEK 3 (Sep 20 - Sep 26): Relationships & The Caregiver Trap ---
   {
-    id: 'cal-w3-pillar',
+    id: 'cal-w2-quora2',
     date: '2026-09-20',
     dayOfWeek: 'Sunday',
     festivalOrTithi: 'Parsva Ekadashi',
-    platform: 'YouTube',
-    contentType: 'Long-form Video',
-    title: 'Why You Attract Partners You Have to Mother: Runanubandha Debt',
-    category: 'relationships',
-    status: 'Idea',
-    notes: '🏆 WEEK 3 PILLAR VIDEO (12-15 min). Karmic caregiver trap & restoring receptive Shakti.'
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Deep-Dive on Vata Dosha Circadian Rhythms & Executive Burnout',
+    category: 'mental_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w2-pillar',
+    notes: 'Weekend Quora marketing: Evergreen authority article driving organic search traffic to the Friday YouTube video.'
   },
+
+  // --- WEEK 3 (Sep 21 - Sep 27): Friday YouTube Anchor Drop (Sept 25th) ---
   {
     id: 'cal-w3-reel1',
     date: '2026-09-21',
     dayOfWeek: 'Monday',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #1: Managing Your Partner Like an Employee Isn\'t Love',
+    title: 'Reel 1: Managing Your Partner Like an Employee Isn\'t Love (Hook Cut)',
     category: 'relationships',
-    status: 'Idea',
+    status: 'Scheduled',
     parentLongformId: 'cal-w3-pillar',
-    notes: 'Visceral hook confronting hyper-independence in dating.'
-  },
-  {
-    id: 'cal-w3-pin1',
-    date: '2026-09-22',
-    dayOfWeek: 'Tuesday',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 1: 5 Signs You Recruited a Project Instead of a Romantic Partner',
-    category: 'relationships',
-    status: 'Idea',
-    parentLongformId: 'cal-w3-pillar'
-  },
-  {
-    id: 'cal-w3-carousel',
-    date: '2026-09-23',
-    dayOfWeek: 'Wednesday',
-    platform: 'Instagram/Facebook',
-    contentType: 'Carousel',
-    title: 'Carousel (7 Slides): Breaking the Karmic Caregiver Dynamic in Love',
-    category: 'relationships',
-    status: 'Idea',
-    parentLongformId: 'cal-w3-pillar'
+    notes: 'Cut from Sep 25 main video: Nakul confessing chronic caretaking fatigue in dating. Full video drops Friday on YouTube.'
   },
   {
     id: 'cal-w3-reel2',
+    date: '2026-09-22',
+    dayOfWeek: 'Tuesday',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 2: Nakul vs Nikhil - The Karmic Recruiter Trap (Dialogue Cut)',
+    category: 'relationships',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w3-pillar',
+    notes: 'Cut from Sep 25 main video: Unpacking how childhood emotional debt attracts adult projects. Friday on YouTube.'
+  },
+  {
+    id: 'cal-w3-reel3',
+    date: '2026-09-23',
+    dayOfWeek: 'Wednesday',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 3: Releasing Pelvic & Sacral Guilt Cords (Body Cut)',
+    category: 'relationships',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w3-pillar',
+    notes: 'Cut from Sep 25 main video: Somatic boundary practice to disengage from hyper-responsibility. Friday on YouTube.'
+  },
+  {
+    id: 'cal-w3-reel4',
     date: '2026-09-24',
     dayOfWeek: 'Thursday',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #2: Why Being "The Strong One" Destroys Romance',
+    title: 'Reel 4: Runanubandha & Restoring Receptive Shakti (Pre-Release Cut)',
     category: 'relationships',
-    status: 'Idea',
-    parentLongformId: 'cal-w3-pillar'
+    status: 'Scheduled',
+    parentLongformId: 'cal-w3-pillar',
+    notes: 'Cut from Sep 25 main video: Scriptural grounding on karmic debt. Tomorrow: Full 15-min Masterclass!'
   },
   {
-    id: 'cal-w3-pin2',
+    id: 'cal-w3-pillar',
     date: '2026-09-25',
     dayOfWeek: 'Friday',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 2: Heart Chakra & Anahata Cord Releasing Ritual',
-    category: 'emotional_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w3-pillar'
-  },
-  {
-    id: 'cal-w3-quora',
-    date: '2026-09-26',
-    dayOfWeek: 'Saturday',
-    platform: 'Quora/Reddit',
-    contentType: 'Community Q&A',
-    title: 'Reddit Deep Dive: "Why hyper-independent women attract man-child partners"',
-    category: 'relationships',
-    status: 'Idea',
-    parentLongformId: 'cal-w3-pillar',
-    notes: 'Value-first discussion thread driving long-tail traffic back to YouTube.'
-  },
-
-  // --- WEEK 4 (Sep 27 - Oct 03): Career Burnout & Bhagavad Gita Reset ---
-  {
-    id: 'cal-w4-pillar',
-    date: '2026-09-27',
-    dayOfWeek: 'Sunday',
-    festivalOrTithi: 'Anant Chaturdashi Window',
     platform: 'YouTube',
     contentType: 'Long-form Video',
-    title: 'The Gita Rule for Corporate Layoff Dread & Career Panic',
-    category: 'money_business',
-    status: 'Idea',
-    notes: '🏆 WEEK 4 PILLAR VIDEO (12-15 min). Gita Ch. 2 Verse 47 applied to modern corporate burnout.'
+    title: 'Why You Attract Partners You Have to Mother: Runanubandha Debt',
+    category: 'relationships',
+    status: 'Scheduled',
+    notes: '🏆 WEEK 3 YOUTUBE PILLAR ANCHOR (15 min). Comprehensive guide to breaking codependent maternal loops in relationships.'
   },
+  {
+    id: 'cal-w3-quora1',
+    date: '2026-09-26',
+    dayOfWeek: 'Saturday',
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Answering "Why do I feel obligated to fix and manage every person I date?"',
+    category: 'relationships',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w3-pillar',
+    notes: 'Weekend Quora marketing: High-intent relationship advice answer linking to Friday\'s YouTube video.'
+  },
+  {
+    id: 'cal-w3-quora2',
+    date: '2026-09-27',
+    dayOfWeek: 'Sunday',
+    festivalOrTithi: 'Anant Chaturdashi',
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: The Vedic Concept of Runanubandha: How Unresolved Past Debts Create Relationship Traps',
+    category: 'relationships',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w3-pillar',
+    notes: 'Weekend Quora marketing: Deep-dive philosophical breakdown channeling readers to the Friday YouTube video.'
+  },
+
+  // --- WEEK 4 (Sep 28 - Oct 04): Friday YouTube Anchor Drop (Oct 02nd) ---
   {
     id: 'cal-w4-reel1',
     date: '2026-09-28',
     dayOfWeek: 'Monday',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #1: Corporate Culture Convinced You Anxiety Equals Ambition',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w4-pillar'
-  },
-  {
-    id: 'cal-w4-pin1',
-    date: '2026-09-29',
-    dayOfWeek: 'Tuesday',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 1: Bhagavad Gita Ch 2: The Executive Peace Protocol',
-    category: 'mental_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w4-pillar'
-  },
-  {
-    id: 'cal-w4-carousel',
-    date: '2026-09-30',
-    dayOfWeek: 'Wednesday',
-    platform: 'Instagram/Facebook',
-    contentType: 'Carousel',
-    title: 'Carousel (6 Slides): 5 Signs Your Burnout Is Actually Svadharma Misalignment',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w4-pillar'
+    title: 'Reel 1: That Lump in Your Throat Is 5 Years of Swallowed Arguments (Hook Cut)',
+    category: 'physical_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w4-pillar',
+    notes: 'Cut from Oct 02 main video: Visceral sensation of throat tightness before high-stakes confrontations. Full video Friday on YouTube.'
   },
   {
     id: 'cal-w4-reel2',
+    date: '2026-09-29',
+    dayOfWeek: 'Tuesday',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 2: Nakul vs Nikhil - Why People-Pleasing Freezes Your Vocal Cords (Dialogue Cut)',
+    category: 'physical_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w4-pillar',
+    notes: 'Cut from Oct 02 main video: Nakul\'s fear of abandonment vs Nikhil\'s teaching on Satya (truth). Friday on YouTube.'
+  },
+  {
+    id: 'cal-w4-reel3',
+    date: '2026-09-30',
+    dayOfWeek: 'Wednesday',
+    platform: 'Instagram/Facebook',
+    contentType: 'Short/Reel',
+    title: 'Reel 3: Shankha Mudra & 2-Minute Vishuddha Vocal Release (Body Cut)',
+    category: 'physical_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w4-pillar',
+    notes: 'Cut from Oct 02 main video: Somatic hand mudra and vocal humming to release chronic neck tension. Friday on YouTube.'
+  },
+  {
+    id: 'cal-w4-reel4',
     date: '2026-10-01',
     dayOfWeek: 'Thursday',
     platform: 'Instagram/Facebook',
     contentType: 'Short/Reel',
-    title: 'Short #2: How to Work 40 Hours Without Your Nervous System Collapsing',
+    title: 'Reel 4: Taittiriya Upanishad on Truth & Speech Power (Pre-Release Cut)',
     category: 'physical_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w4-pillar'
+    status: 'Scheduled',
+    parentLongformId: 'cal-w4-pillar',
+    notes: 'Cut from Oct 02 main video: Satyam Vada Dharmam Chara distillation. Tomorrow: Full 12-min Masterclass!'
   },
   {
-    id: 'cal-w4-pin2',
+    id: 'cal-w4-pillar',
     date: '2026-10-02',
     dayOfWeek: 'Friday',
-    platform: 'Pinterest',
-    contentType: 'Pinterest Pin',
-    title: 'Pin 2: Solar Plexus & Manipura Fire Alignment for Focus',
+    platform: 'YouTube',
+    contentType: 'Long-form Video',
+    title: 'The Silent Throat Lump: Releasing Unspoken Boundaries',
     category: 'physical_health',
-    status: 'Idea',
-    parentLongformId: 'cal-w4-pillar'
+    status: 'Scheduled',
+    notes: '🏆 WEEK 4 YOUTUBE PILLAR ANCHOR (12 min). Somatic Vishuddha Chakra and boundary vocalization guide with consultation CTA.'
   },
   {
-    id: 'cal-w4-newsletter',
+    id: 'cal-w4-quora1',
     date: '2026-10-03',
     dayOfWeek: 'Saturday',
-    platform: 'YouTube',
-    contentType: 'Community Q&A',
-    title: 'Substack & Community: Taittiriya Upanishad and the Modern Investment Portfolio',
-    category: 'money_business',
-    status: 'Idea',
-    parentLongformId: 'cal-w4-pillar'
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Answering "Why does my throat feel like it\'s closing up when I try to speak up for myself?"',
+    category: 'physical_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w4-pillar',
+    notes: 'Weekend Quora marketing: High-intent answers explaining the somatic anatomy of suppressed boundaries, routing readers to Friday\'s YouTube video.'
+  },
+  {
+    id: 'cal-w4-quora2',
+    date: '2026-10-04',
+    dayOfWeek: 'Sunday',
+    platform: 'Quora',
+    contentType: 'Quora Marketing',
+    title: 'Quora Marketing: Deep-Dive on Vishuddha Chakra Somatics & Overcoming Lifelong Conflict Avoidance',
+    category: 'physical_health',
+    status: 'Scheduled',
+    parentLongformId: 'cal-w4-pillar',
+    notes: 'Weekend Quora marketing: Comprehensive long-tail post channeling authority search traffic into the Friday YouTube video.'
   }
 ];
 
@@ -599,7 +602,7 @@ export const INITIAL_FEEDBACK_LOGS: PerformanceFeedbackLog[] = [
     avgWatchTimePercent: 54.8,
     sharesOrSaves: 3120,
     consultationClicksOrInquiries: 42,
-    userObservations: 'Spectacular retention during the 2am physical description of panic. Viewers loved the collision hook ("I gave back a $20k bonus because my stomach burned"). Led to 42 consultation link clicks!',
+    userObservations: 'Spectacular retention during the visceral daytime car freeze description of panic. Viewers loved the collision hook ("I gave back a $20k bonus because my stomach burned"). Led to 42 consultation link clicks!',
     aiLearnedInsights: 'Hook Formula: Collision of high-status achievement with somatic terror outperformed spiritual theory by +41% CTR. Consult CTA framing around financial-emotional survival converted highest.'
   },
   {
@@ -660,7 +663,7 @@ export const INITIAL_LEARNING_STATE: LearningSystemState = {
   ],
   hookFormulaEffectiveness: [
     { formula: 'Idea Collision (High achievement vs visceral terror)', winRate: 88, recommendation: 'Keep pairing modern success markers with hidden somatic suffering.' },
-    { formula: 'Symptom-first curiosity ("Why you freeze at 2am")', winRate: 82, recommendation: 'Always name the physical feeling before naming the chakra.' },
+    { formula: 'Symptom-first curiosity ("Why you freeze under pressure")', winRate: 82, recommendation: 'Always name the physical feeling before naming the chakra.' },
     { formula: 'Ancestral lineage mirror ("What you inherited")', winRate: 79, recommendation: 'Deploy during Amavasya / Pitru Paksha season for peak resonance.' }
   ],
   seoLessons: [

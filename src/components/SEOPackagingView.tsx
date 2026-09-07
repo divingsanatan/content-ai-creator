@@ -66,7 +66,7 @@ export const SEOPackagingView: React.FC<SEOPackagingViewProps> = ({
           topic: activeTopic.workingTitle,
           titles: [
             { title: "Why You Panic When Money Comes In: The Root Reset", charCount: 52, isProblemLed: true },
-            { title: "The 2am Financial Anxiety Trap Nobody Talks About", charCount: 48, isProblemLed: true },
+            { title: "The Sudden Financial Anxiety Trap Nobody Talks About", charCount: 51, isProblemLed: true },
             { title: "How Muladhara Chakra Blocks Your Income Stability", charCount: 50, isProblemLed: false },
             { title: "Stop Root Panic: Ancient Vedic Nervous System Reset", charCount: 52, isProblemLed: false },
             { title: "Why Hard Work Won't Fix Your Bank Account Panic", charCount: 47, isProblemLed: true }
@@ -74,7 +74,7 @@ export const SEOPackagingView: React.FC<SEOPackagingViewProps> = ({
           youtubeDescription: {
             firstTwoLinesFold: "If you get physically anxious every time you check your bank balance, this isn't a budgeting failure. It's an ungrounded nervous system loop rooted in your Muladhara chakra.",
             summary: "In this 14-minute deep dive, we break down why financial stress triggers the ancient fight-or-flight freeze reflex, how the earth element in Vedic philosophy governs material containment, and the somatic ritual to release money panic for good.",
-            timestampsPlaceholder: "0:00 - The 2am Bank Balance Knot\\n1:12 - Why Financial Literacy Doesn't Stop Panic\\n4:15 - What Vedic Rishis Knew About Prithvi Tattva\\n7:40 - The Muladhara Somatic Release\\n11:20 - Next Steps & Personal Alignment",
+            timestampsPlaceholder: "0:00 - The Real-World Bank Balance Knot\\n1:12 - Why Financial Literacy Doesn't Stop Panic\\n4:15 - What Vedic Rishis Knew About Prithvi Tattva\\n7:40 - The Muladhara Somatic Release\\n11:20 - Next Steps & Personal Alignment",
             consultationCta: "Book a 1-on-1 Spiritual Healing & Life Coaching Consultation: https://dharmacraft.example.com/consult (Covering finances, relationships, emotional burnout, and physical well-being).",
             wordCount: 220
           },
@@ -98,7 +98,7 @@ export const SEOPackagingView: React.FC<SEOPackagingViewProps> = ({
           hashtags: ["#FinancialAnxiety", "#MoneyPanic", "#RootChakra", "#SanatanDharma", "#NervousSystemHealing"],
           thumbnailTexts: [
             { text: "WHY MONEY SCARES YOU", isProblemStated: true },
-            { text: "THE 2AM PANIC TRAP", isProblemStated: true },
+            { text: "THE SUDDEN PANIC TRAP", isProblemStated: true },
             { text: "ROOT CHAKRA RESET", isProblemStated: false }
           ],
           instagramFacebookCaption: {
@@ -122,22 +122,22 @@ export const SEOPackagingView: React.FC<SEOPackagingViewProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded">
+      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 sm:p-6 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded shrink-0 mt-0.5 sm:mt-0">
             M6
           </div>
-          <div>
-            <h1 className="text-xl font-medium tracking-tight text-white">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl font-medium tracking-tight text-white truncate sm:text-clip">
               Module 6: <span className="text-amber-500 font-normal">YouTube SEO & Packaging Engine</span>
             </h1>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400 mt-0.5">
               5 Titles (&lt;60 char, &gt;=2 problem-led) • 150–300w Description • 15 Mixed Tags • 5 Hashtags • 3 Thumbnails • IG/FB Caption.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
           {currentPkg && (
             <button
               onClick={onNavigateToPinterest}

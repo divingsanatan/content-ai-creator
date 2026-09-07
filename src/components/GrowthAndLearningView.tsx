@@ -13,27 +13,36 @@ import {
   Copy, 
   Check, 
   MessageSquare,
-  ShieldCheck
+  ShieldCheck,
+  Brain
 } from 'lucide-react';
 import { 
   GrowthPlaybook, 
   PerformanceFeedbackLog, 
   LearningSystemState, 
   TopicIdea, 
-  LifeProblemCategory 
+  LifeProblemCategory,
+  CreatorMindsetProfile
 } from '../types';
 import { CATEGORY_LABELS } from '../data/sanatanCalendar';
 import { FlowFooterBar } from './FlowFooterBar';
 import { ActiveModule } from './Navbar';
+import { CreatorMindsetStudio } from './CreatorMindsetStudio';
+import { CategorySelect } from './CategorySelect';
+import { useCategories } from '../context/CategoryContext';
 
 interface GrowthAndLearningViewProps {
   activeTopic: TopicIdea | null;
   growthPlaybook: GrowthPlaybook | null;
   feedbackLogs: PerformanceFeedbackLog[];
   learningState: LearningSystemState;
+  mindsetProfile?: CreatorMindsetProfile | null;
   onUpdateGrowthPlaybook: (playbook: GrowthPlaybook) => void;
   onAddFeedbackLog: (log: PerformanceFeedbackLog) => void;
   onUpdateLearningState: (state: LearningSystemState) => void;
+  onUpdateMindsetGuidance?: (guidance: string) => Promise<void>;
+  onAddMindsetRule?: (ruleData: { category: any; rule: string; sourceIdeaOrBrief?: string }) => Promise<void>;
+  onRemoveMindsetRule?: (ruleId: string) => Promise<void>;
   onNavigate?: (module: ActiveModule) => void;
 }
 
@@ -42,12 +51,17 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
   growthPlaybook,
   feedbackLogs,
   learningState,
+  mindsetProfile,
   onUpdateGrowthPlaybook,
   onAddFeedbackLog,
   onUpdateLearningState,
+  onUpdateMindsetGuidance,
+  onAddMindsetRule,
+  onRemoveMindsetRule,
   onNavigate
 }) => {
-  const [activeTab, setActiveTab] = useState<'feedback_loop' | 'playbook' | 'atomization' | 'ab_testing'>('feedback_loop');
+  const { getCategoryMeta } = useCategories();
+  const [activeTab, setActiveTab] = useState<'feedback_loop' | 'creator_mindset' | 'playbook' | 'atomization' | 'ab_testing'>('feedback_loop');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isGeneratingPlaybook, setIsGeneratingPlaybook] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -61,6 +75,8 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
   const [logRetention, setLogRetention] = useState('58.2');
   const [logSaves, setLogSaves] = useState('420');
   const [logConsults, setLogConsults] = useState('14');
+  const [logWhatWorked, setLogWhatWorked] = useState('');
+  const [logWhatFailed, setLogWhatFailed] = useState('');
   const [logNotes, setLogNotes] = useState('');
   const [logStatusMsg, setLogStatusMsg] = useState<string | null>(null);
 
@@ -70,7 +86,7 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const handleAddLog = (e: React.FormEvent) => {
+  const handleAddLog = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!logTitle.trim()) return;
 
@@ -84,13 +100,30 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
       avgWatchTimePercent: Number(logRetention) || 0,
       saves: Number(logSaves) || 0,
       consultationClicks: Number(logConsults) || 0,
+      whatWorked: logWhatWorked.trim() || undefined,
+      whatFailed: logWhatFailed.trim() || undefined,
       userNotes: logNotes || 'Logged from creator analytics.',
       loggedAt: new Date().toISOString().split('T')[0]
     };
 
     onAddFeedbackLog(newLog);
-    setLogStatusMsg(`Logged metrics for "${newLog.contentTitle}". Ready for AI learning analysis!`);
+
+    // Persist to server & Supabase database
+    try {
+      await fetch('/api/feedback/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ log: newLog })
+      });
+      setLogStatusMsg(`Persisted metrics & learning feedback for "${newLog.contentTitle}" into database!`);
+    } catch (err) {
+      console.warn('Feedback log local save active:', err);
+      setLogStatusMsg(`Logged metrics for "${newLog.contentTitle}". Ready for AI learning analysis!`);
+    }
+
     setLogTitle('');
+    setLogWhatWorked('');
+    setLogWhatFailed('');
     setLogNotes('');
   };
 
@@ -116,11 +149,11 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
           ],
           hookFormulaEffectiveness: [
             { formula: 'Idea Collision (0–3s)', winRate: 88, recommendation: 'Juxtapose modern worldly symptom (bank balance, ghosting) with ancient somatic reality.' },
-            { formula: '2am Visceral Body Sensation', winRate: 79, recommendation: 'Describe chest knot, freezing hands, or dry throat to provoke instant identification.' }
+            { formula: 'Daytime Visceral Body Sensation', winRate: 79, recommendation: 'Describe chest knot, freezing hands, or dry throat to provoke instant identification.' }
           ],
           seoLessons: [
             'Problem-led titles outperform spiritual-led titles by 41% CTR on cold browse traffic.',
-            'Always pair a physical symptom ("freeze", "2am panic") with a named Vedic concept in YouTube tags.',
+            'Always pair a physical symptom ("freeze", "panic under pressure") with a named Vedic concept in YouTube tags.',
             'Pinterest boards perform best when titled after daily self-healing rather than esoteric astrology terms.',
             'Shorts traffic spikes when on-screen captions flash words like "predator", "survival", and "prithvi".'
           ],
@@ -216,9 +249,9 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
               hypothesis: "Appeals directly to unspoken psychological shame, winning higher cold CTR."
             },
             variantB: {
-              headline: "THE 2AM PANIC TRAP",
-              visualFocalPoint: "Late night smartphone glow, dark background, lime yellow typography",
-              hypothesis: "Triggers nocturnal symptom searches and acute problem awareness."
+              headline: "THE SUCCESS FREEZE TRAP",
+              visualFocalPoint: "Car interior windshield view, stark midday lighting, lime yellow typography",
+              hypothesis: "Triggers daytime symptom searches and acute problem awareness."
             }
           },
           communityQuestionToPin: "What is the very first physical sensation you feel in your body when you see an unexpected financial notification? (Drop the exact organ or feeling below—let's normalize this together)."
@@ -284,6 +317,17 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
         >
           <BrainCircuit className="w-3.5 h-3.5 text-amber-500" />
           Performance Feedback & AI Memory
+        </button>
+        <button
+          onClick={() => setActiveTab('creator_mindset')}
+          className={`px-4 py-2 text-xs font-medium rounded-t transition cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
+            activeTab === 'creator_mindset'
+              ? 'bg-slate-900 text-amber-400 border-t-2 border-amber-500 font-semibold'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+          }`}
+        >
+          <Brain className="w-3.5 h-3.5 text-amber-500" />
+          Creator Mindset & Content DNA ({mindsetProfile?.learnedRules.length || 6})
         </button>
         <button
           onClick={() => setActiveTab('playbook')}
@@ -403,17 +447,11 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
 
                 <div>
                   <label className="text-slate-400 block mb-1 text-xs">Category:</label>
-                  <select
+                  <CategorySelect
                     value={logCategory}
-                    onChange={(e) => setLogCategory(e.target.value as any)}
-                    className="w-full p-2 bg-slate-900 border border-slate-700 text-slate-200 rounded text-xs focus:border-amber-500 focus:outline-none"
-                  >
-                    <option value="relationships">Relationships</option>
-                    <option value="money_business">Money & Business</option>
-                    <option value="mental_health">Mental Health</option>
-                    <option value="physical_health">Physical Health</option>
-                    <option value="emotional_health">Emotional Health</option>
-                  </select>
+                    onChange={(val) => setLogCategory(val as LifeProblemCategory)}
+                    size="sm"
+                  />
                 </div>
               </div>
 
@@ -471,6 +509,34 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-emerald-400 block mb-1 text-xs font-medium">
+                    What Worked Well (AI Success Pattern):
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={logWhatWorked}
+                    onChange={(e) => setLogWhatWorked(e.target.value)}
+                    placeholder="e.g. Relatable workday money panic hook, Nakul's sarcastic humor, Gita verse 47 practical grounding"
+                    className="w-full p-2 bg-slate-900 border border-emerald-900/60 text-slate-200 rounded text-xs focus:border-emerald-500 focus:outline-none placeholder-slate-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-rose-400 block mb-1 text-xs font-medium">
+                    What Failed / Caused Dropoff (AI Anti-Pattern):
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={logWhatFailed}
+                    onChange={(e) => setLogWhatFailed(e.target.value)}
+                    placeholder="e.g. Sanskrit terms introduced before minute 3, title was too academic, audio track was too loud"
+                    className="w-full p-2 bg-slate-900 border border-rose-900/60 text-slate-200 rounded text-xs focus:border-rose-500 focus:outline-none placeholder-slate-600"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="text-slate-400 block mb-1 text-xs">
                   Qualitative Feedback & Observations:
@@ -479,7 +545,7 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
                   rows={2}
                   value={logNotes}
                   onChange={(e) => setLogNotes(e.target.value)}
-                  placeholder="e.g. Audience reacted strongly to the 2am knot in the stomach description. Multiple comments asked for 1-on-1 consultations directly."
+                  placeholder="e.g. Audience reacted strongly to the car freeze stomach knot description. Multiple comments asked for 1-on-1 consultations directly."
                   className="w-full p-2 bg-slate-900 border border-slate-700 text-slate-200 rounded text-xs focus:border-amber-500 focus:outline-none"
                 />
               </div>
@@ -510,7 +576,7 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
             <div className="divide-y divide-slate-800">
               {feedbackLogs.map((log) => (
                 <div key={log.id} className="p-4 hover:bg-slate-900/40 transition text-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div className="space-y-1">
+                  <div className="space-y-1.5 max-w-xl">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-white text-sm">
                         {log.contentTitle}
@@ -518,10 +584,30 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
                       <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-amber-400 font-semibold border border-slate-700">
                         {log.platform}
                       </span>
+                      <span className="text-[10px] font-mono text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">
+                        {getCategoryMeta(log.category).label}
+                      </span>
                     </div>
-                    <p className="text-slate-400 italic">
-                      "{log.userNotes}"
-                    </p>
+
+                    {log.whatWorked && (
+                      <div className="text-[11px] text-emerald-300 flex items-start gap-1">
+                        <span className="font-bold shrink-0 text-emerald-400 font-mono">✓ What Worked:</span>
+                        <span>{log.whatWorked}</span>
+                      </div>
+                    )}
+
+                    {log.whatFailed && (
+                      <div className="text-[11px] text-rose-300 flex items-start gap-1">
+                        <span className="font-bold shrink-0 text-rose-400 font-mono">✕ Friction/Failed:</span>
+                        <span>{log.whatFailed}</span>
+                      </div>
+                    )}
+
+                    {log.userNotes && (
+                      <p className="text-slate-400 italic">
+                        "{log.userNotes}"
+                      </p>
+                    )}
                     <span className="text-[10px] font-mono text-slate-500">
                       Logged on {log.loggedAt}
                     </span>
@@ -550,6 +636,19 @@ export const GrowthAndLearningView: React.FC<GrowthAndLearningViewProps> = ({
             </div>
           </div>
         </div>
+      )}
+
+      {/* TAB: Creator Mindset & Content DNA Studio */}
+      {activeTab === 'creator_mindset' && (
+        <CreatorMindsetStudio
+          mindsetProfile={mindsetProfile}
+          onUpdateMindsetGuidance={onUpdateMindsetGuidance}
+          onAddMindsetRule={onAddMindsetRule}
+          onRemoveMindsetRule={onRemoveMindsetRule}
+          onNavigateToAutoPilot={() => {
+            if (onNavigate) onNavigate('auto_pilot');
+          }}
+        />
       )}
 
       {/* TAB 2: 5-Day Pre-Launch Hype Sequence */}

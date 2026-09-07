@@ -16,12 +16,17 @@ import {
   Share2,
   LayoutGrid,
   ListFilter,
-  Check
+  Check,
+  Zap,
+  List
 } from 'lucide-react';
 import { CalendarItem, TopicIdea, LifeProblemCategory } from '../types';
 import { HINDU_CALENDAR_EVENTS, CATEGORY_LABELS } from '../data/sanatanCalendar';
 import { FlowFooterBar } from './FlowFooterBar';
 import { ActiveModule } from './Navbar';
+import { ScheduledIdeasPipeline } from './ScheduledIdeasPipeline';
+import { CategorySelect } from './CategorySelect';
+import { useCategories } from '../context/CategoryContext';
 
 interface CalendarViewProps {
   calendar: CalendarItem[];
@@ -42,11 +47,12 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   onSelectTopicForScript,
   onNavigate
 }) => {
+  const { getCategoryMeta } = useCategories();
   const [selectedMonth, setSelectedMonth] = useState('September');
   const [selectedYear, setSelectedYear] = useState('2026');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<'sprints' | 'chronological'>('sprints');
+  const [viewMode, setViewMode] = useState<'sprints' | 'chronological' | 'ideas_pipeline'>('sprints');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
@@ -91,40 +97,40 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   // Long-form anchors in calendar
   const allAnchors = calendar.filter(item => item.contentType === 'Long-form Video');
 
-  // Defined Weekly Sprints (September 2026)
-  // Cadence Rule: Exactly 1 Long-form YouTube Video per week, rest are Reels, Carousels, Pins, Community
+  // Defined Weekly Sprints (September - October 2026)
+  // Cadence Rule: Exactly 1 Long-form YouTube Video on Friday, Mon-Thu Reels (earlier in week), Sat-Sun Quora Marketing (weekend)
   const SPRINT_CONFIGS = [
     {
       weekNum: 1,
       name: 'Week 1 Sprint',
-      dateRange: 'Sep 04 – Sep 12',
-      startDate: '2026-09-04',
-      endDate: '2026-09-12',
-      coreTheme: 'Financial Freeze & Root Chakra (Muladhara)'
+      dateRange: 'Sep 07 – Sep 13',
+      startDate: '2026-09-07',
+      endDate: '2026-09-13',
+      coreTheme: 'Financial Freeze & Root Chakra (Muladhara) • Friday Anchor: Sep 11'
     },
     {
       weekNum: 2,
       name: 'Week 2 Sprint',
-      dateRange: 'Sep 13 – Sep 19',
-      startDate: '2026-09-13',
-      endDate: '2026-09-19',
-      coreTheme: 'Nocturnal 3am Panic & Vata-Heart Reset'
+      dateRange: 'Sep 14 – Sep 20',
+      startDate: '2026-09-14',
+      endDate: '2026-09-20',
+      coreTheme: 'Workday Freeze Under Pressure & Vata-Heart Reset • Friday Anchor: Sep 18'
     },
     {
       weekNum: 3,
       name: 'Week 3 Sprint',
-      dateRange: 'Sep 20 – Sep 26',
-      startDate: '2026-09-20',
-      endDate: '2026-09-26',
-      coreTheme: 'Relationship Ancestral Debt & Caregiver Trap'
+      dateRange: 'Sep 21 – Sep 27',
+      startDate: '2026-09-21',
+      endDate: '2026-09-27',
+      coreTheme: 'Relationship Ancestral Debt & Caregiver Trap • Friday Anchor: Sep 25'
     },
     {
       weekNum: 4,
       name: 'Week 4 Sprint',
-      dateRange: 'Sep 27 – Oct 03',
-      startDate: '2026-09-27',
-      endDate: '2026-10-03',
-      coreTheme: 'Corporate Burnout & Bhagavad Gita Svadharma'
+      dateRange: 'Sep 28 – Oct 04',
+      startDate: '2026-09-28',
+      endDate: '2026-10-04',
+      coreTheme: 'Corporate Burnout & Bhagavad Gita Svadharma • Friday Anchor: Oct 02'
     }
   ];
 
@@ -144,9 +150,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       isCompliant,
       isOverProducing,
       reelsCount: derivativesInWeek.filter(d => d.contentType === 'Short/Reel').length,
+      quoraCount: derivativesInWeek.filter(d => d.contentType === 'Quora Marketing' || d.platform === 'Quora' || d.platform === 'Quora/Reddit').length,
       carouselsCount: derivativesInWeek.filter(d => d.contentType === 'Carousel').length,
       pinsCount: derivativesInWeek.filter(d => d.contentType === 'Pinterest Pin').length,
-      otherCount: derivativesInWeek.filter(d => !['Short/Reel', 'Carousel', 'Pinterest Pin'].includes(d.contentType)).length,
+      otherCount: derivativesInWeek.filter(d => !['Short/Reel', 'Carousel', 'Pinterest Pin', 'Quora Marketing'].includes(d.contentType)).length,
     };
   });
 
@@ -224,39 +231,47 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded">
+      <div className="bg-[#0E1116] border border-slate-800 rounded-lg p-5 sm:p-6 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+          <div className="w-8 h-8 bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-mono font-bold text-xs rounded shrink-0 mt-0.5 sm:mt-0">
             M4
           </div>
-          <div>
-            <h1 className="text-xl font-medium tracking-tight text-white">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl font-medium tracking-tight text-white truncate sm:text-clip">
               Module 4: <span className="text-amber-500 font-normal">Content Calendar & Sprint Pacing</span>
             </h1>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400 mt-0.5">
               Weekly Cadence: 1 Anchor YouTube Video/week • 6 Repurposed Satellites (Reels/Carousels/Pins) • Tithi Alignment.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0">
+          <button
+            onClick={() => onNavigate('auto_pilot')}
+            className="px-3 py-2 rounded bg-gradient-to-r from-amber-500/20 to-amber-500/10 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shrink-0 shadow-xs"
+            title="Input any topic brief, AI will schedule and script the entire flow"
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            <span>⚡ Auto-Pilot Brief</span>
+          </button>
           <button
             onClick={() => {
               setNewParentLongformId('');
               setShowAddModal(true);
             }}
-            className="px-3.5 py-2 rounded bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
+            className="px-3 py-2 rounded bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer shrink-0"
           >
             <Plus className="w-3.5 h-3.5 text-amber-400" />
-            Schedule Item
+            <span>Schedule Item</span>
           </button>
           <button
             onClick={handleGenerateMonthCalendar}
             disabled={isGenerating}
-            className="px-4 py-2 rounded bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center gap-2 transition disabled:opacity-50 cursor-pointer shadow-xs"
+            className="px-3.5 sm:px-4 py-2 rounded bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center gap-2 transition disabled:opacity-50 cursor-pointer shadow-xs shrink-0"
           >
             <Sparkles className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
-            {isGenerating ? 'Aligning Tithis...' : 'AI Full Month Auto-Pacing'}
+            <span>{isGenerating ? 'Aligning...' : 'AI Full Month Auto-Pacing'}</span>
           </button>
         </div>
       </div>
@@ -268,7 +283,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             <div className="flex items-center gap-2">
               <Youtube className="w-4 h-4 text-red-500" />
               <span className="text-sm font-semibold text-white">
-                Cadence Rule: 1 Long YouTube Video / Week
+                Cadence Rule: Friday Anchor + Mon-Thu Reels + Sat-Sun Quora
               </span>
               <span className={`text-[11px] font-mono px-2 py-0.5 rounded border flex items-center gap-1 ${
                 isOverallCadenceCompliant 
@@ -280,7 +295,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Plan exactly 1 high-gravity pillar YouTube video per week. The remaining 6 days are populated exclusively with repurposed satellites (Instagram Reels, Carousels, Pinterest Pins) that funnel audience back to that anchor.
+              Main YouTube Anchor drops every <strong className="text-amber-400">Friday</strong> (Sep 11, 18, 25, Oct 02). Earlier in the week (<strong className="text-slate-300">Mon–Thu</strong>), schedule 4 anticipation Reels cut from the main video. On the weekend (<strong className="text-slate-300">Sat–Sun</strong>), execute targeted Quora marketing to funnel problem-aware audiences into the Friday anchor.
             </p>
           </div>
 
@@ -307,6 +322,17 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             >
               <ListFilter className="w-3.5 h-3.5" />
               Chronological ({filteredItems.length})
+            </button>
+            <button
+              onClick={() => setViewMode('ideas_pipeline')}
+              className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition cursor-pointer ${
+                viewMode === 'ideas_pipeline'
+                  ? 'bg-amber-500 text-slate-950 font-semibold shadow-xs'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <List className="w-3.5 h-3.5" />
+              Generated Ideas ({topics.length})
             </button>
           </div>
         </div>
@@ -345,12 +371,12 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                 <div className="text-[11px] text-slate-400 truncate mb-1">
                   {hasPillar ? sp.anchor?.title : 'No Pillar Scheduled'}
                 </div>
-                <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
-                  <span>{sp.reelsCount} Reels</span>
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
+                  <span className="text-pink-400">{sp.reelsCount} Reels</span>
                   <span>•</span>
-                  <span>{sp.carouselsCount} Carousels</span>
-                  <span>•</span>
-                  <span>{sp.pinsCount} Pins</span>
+                  <span className="text-red-400">{sp.quoraCount} Quora</span>
+                  {sp.carouselsCount > 0 && <span>• {sp.carouselsCount} Carousels</span>}
+                  {sp.pinsCount > 0 && <span>• {sp.pinsCount} Pins</span>}
                 </div>
               </div>
             );
@@ -554,6 +580,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5">
                       {sprint.derivatives.map((sat) => {
                         const isReel = sat.contentType === 'Short/Reel';
+                        const isQuora = sat.contentType === 'Quora Marketing' || sat.platform === 'Quora' || sat.platform === 'Quora/Reddit';
                         const isCarousel = sat.contentType === 'Carousel';
                         const isPin = sat.contentType === 'Pinterest Pin';
                         const isHype = sat.contentType === 'Pre-Launch Hype';
@@ -567,8 +594,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                               <div className="flex items-center justify-between text-[10px] font-mono">
                                 <span className={`px-1.5 py-0.5 rounded font-medium ${
                                   isReel ? 'bg-pink-950/60 text-pink-300 border border-pink-800/60' :
+                                  isQuora ? 'bg-red-950/70 text-red-300 border border-red-800/60' :
                                   isCarousel ? 'bg-blue-950/60 text-blue-300 border border-blue-800/60' :
-                                  isPin ? 'bg-red-950/60 text-red-300 border border-red-800/60' :
+                                  isPin ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60' :
                                   isHype ? 'bg-amber-950/60 text-amber-300 border border-amber-800/60' :
                                   'bg-slate-800 text-slate-300'
                                 }`}>
@@ -643,19 +671,15 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
               <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
                 <span>Category:</span>
-                <select
+                <CategorySelect
                   id="calendar-category-filter"
                   value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="text-xs px-2 py-1 rounded border border-slate-800 bg-slate-900 text-slate-200 cursor-pointer focus:outline-hidden focus:border-amber-500"
-                >
-                  <option value="all" className="bg-[#0E1116]">All Categories</option>
-                  <option value="relationships" className="bg-[#0E1116]">Relationships</option>
-                  <option value="money_business" className="bg-[#0E1116]">Money & Business</option>
-                  <option value="mental_health" className="bg-[#0E1116]">Mental Health</option>
-                  <option value="physical_health" className="bg-[#0E1116]">Physical Health</option>
-                  <option value="emotional_health" className="bg-[#0E1116]">Emotional Health</option>
-                </select>
+                  onChange={setCategoryFilter}
+                  includeAllOption
+                  allLabel="All Categories"
+                  size="sm"
+                  containerClassName="w-auto min-w-[180px]"
+                />
               </div>
             </div>
 
@@ -667,7 +691,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           {/* Calendar List View */}
           <div className="space-y-3">
             {filteredItems.map((item) => {
-              const catBadge = CATEGORY_LABELS[item.category] || { label: item.category, color: 'text-slate-300', bg: 'bg-slate-800', border: 'border-slate-700' };
+              const catBadge = getCategoryMeta(item.category);
               const isAnchor = item.contentType === 'Long-form Video';
               const isHype = item.contentType === 'Pre-Launch Hype';
 
@@ -764,6 +788,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         </div>
       )}
 
+      {/* GENERATED IDEAS PIPELINE VIEW MODE */}
+      {viewMode === 'ideas_pipeline' && (
+        <div className="pt-2">
+          <ScheduledIdeasPipeline
+            topics={topics}
+            calendar={calendar}
+            onSelectTopicForScript={(topic) => onSelectTopicForScript(topic.workingTitle, topic.category)}
+            onNavigate={onNavigate || (() => {})}
+          />
+        </div>
+      )}
+
       {/* Modal: Schedule Item */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
@@ -807,17 +843,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
                 <div>
                   <label className="font-semibold text-slate-300 block mb-1">Category:</label>
-                  <select
+                  <CategorySelect
                     value={newCat}
-                    onChange={(e) => setNewCat(e.target.value as any)}
-                    className="w-full p-2 border border-slate-800 bg-slate-900 rounded text-slate-200 text-xs focus:outline-hidden focus:border-amber-500"
-                  >
-                    <option value="relationships" className="bg-[#0E1116]">Relationships</option>
-                    <option value="money_business" className="bg-[#0E1116]">Money & Business</option>
-                    <option value="mental_health" className="bg-[#0E1116]">Mental Health</option>
-                    <option value="physical_health" className="bg-[#0E1116]">Physical Health</option>
-                    <option value="emotional_health" className="bg-[#0E1116]">Emotional Health</option>
-                  </select>
+                    onChange={(val) => setNewCat(val as any)}
+                    size="sm"
+                  />
                 </div>
               </div>
 
@@ -831,6 +861,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   >
                     <option value="YouTube" className="bg-[#0E1116]">YouTube</option>
                     <option value="Instagram/Facebook" className="bg-[#0E1116]">Instagram/Facebook</option>
+                    <option value="Quora" className="bg-[#0E1116]">Quora (Weekend Marketing)</option>
                     <option value="Pinterest" className="bg-[#0E1116]">Pinterest</option>
                     <option value="Meta/Stories" className="bg-[#0E1116]">Meta/Stories</option>
                     <option value="Quora/Reddit" className="bg-[#0E1116]">Quora/Reddit</option>
@@ -845,6 +876,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                     className="w-full p-2 border border-slate-800 bg-slate-900 rounded text-slate-200 text-xs focus:outline-hidden focus:border-amber-500"
                   >
                     <option value="Short/Reel" className="bg-[#0E1116]">Short/Reel (Satellite)</option>
+                    <option value="Quora Marketing" className="bg-[#0E1116]">Quora Marketing (Satellite)</option>
                     <option value="Carousel" className="bg-[#0E1116]">Carousel (Satellite)</option>
                     <option value="Pinterest Pin" className="bg-[#0E1116]">Pinterest Pin (Satellite)</option>
                     <option value="Pre-Launch Hype" className="bg-[#0E1116]">Pre-Launch Hype</option>

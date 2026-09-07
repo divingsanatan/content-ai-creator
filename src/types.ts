@@ -3,7 +3,20 @@ export type LifeProblemCategory =
   | 'money_business'
   | 'mental_health'
   | 'physical_health'
-  | 'emotional_health';
+  | 'emotional_health'
+  | (string & {});
+
+export interface CategoryDefinition {
+  id: string;
+  label: string;
+  color: string;
+  bg: string;
+  border: string;
+  description?: string;
+  isDefault?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export interface TrendItem {
   id: string;
@@ -121,10 +134,67 @@ export interface DualActorDirectingGuide {
   filmingWorkflowTip: string;
 }
 
+// 1. StoryBrand (SB7) Hero / Guide CTA Framework (Donald Miller)
+export type StoryNarrativeArchetype = 
+  | 'personal_confession' // "I lived this mistake and here is what broke me..."
+  | 'micro_trigger' // A 5-second everyday interaction that exposed a massive subconscious pattern
+  | 'paradox_of_success' // Achieving what I thought would fix me, only to feel empty or terrified (Arrival Fallacy)
+  | 'silent_body_rebellion' // Operating on autopilot until my body physically forced a stop
+  | 'everyday_epiphany'; // A timeless Vedic truth witnessed in an ordinary human interaction
+
+export interface StoryBrandCTA {
+  hero: string; // The viewer with an unresolved life problem (NOT the creator)
+  problem: string; // External symptom, internal turmoil, and philosophical injustice
+  guideRole: string; // You/Nikhil: Experienced practitioner with empathy & authority (has been there)
+  plan: string; // The clear 3-step pathway (Book 1-on-1 -> Diagnose energetic root -> Rebuild container)
+  callToAction: string; // Direct CTA to schedule spiritual healing / life coaching consultation
+  failureAvoided: string; // The toxic cycle or self-sabotage prevented
+  successVision: string; // The grounded peace & expanded capacity achieved
+  turnBeatRole: string; // How the Turn beat transitions the speaker from fellow sufferer to guide
+}
+
+// 2. PAS / PASO (Problem - Agitate - Solve - Outcome) Framework for Orbit Content & 60-90s Shorts
+export interface PasoOrbitShort {
+  duration: string; // e.g. '60-90s'
+  problem: string; // Exact relatable pain point or visceral symptom accurately named (in diverse real-world settings)
+  agitate: string; // Emotional weight & somatic consequence (truthful, zero fabrication/exaggeration)
+  solve: string; // The single breakthrough insight or Vedic mechanism
+  outcome: string; // What changes / life after the fix (somatic relief)
+  softCta: string; // Points back to full anchor video (YouTube link in bio)
+  zeroFabricationVerified: boolean; // Quality check: no fabricated/inflated panic
+}
+
+// 3. ABT (And, But, Therefore) Script-Tightening Diagnostic Test (Randy Olson)
+export interface ABTDiagnostic {
+  andSetup: string; // Context & what happens ("this happens, AND this happens...")
+  butLinchpin: string; // The turning-point contradiction ("BUT this happens...")
+  thereforeResolution: string; // Resolution & actionable shift ("THEREFORE this happens...")
+  compressedOneLiner: string; // Full 1-sentence narrative compression
+  hasLinchpinContradiction: boolean; // Quality check: confirms script is a story, not a lecture
+  singleIdentifiableProtagonist: string; // Identifiable-victim focus (one specific human)
+  diagnosticVerdict: 'Story Engine Validated (Linchpin Found)' | 'Warning: Flat Lecture (Missing Contradiction)';
+}
+
+// 4. Universal Retention Structure Sanity Check (4-Beat Skeleton)
+export interface UniversalRetentionCheck {
+  reasonToCare: { beat: string; status: 'pass' | 'flag'; note: string }; // First 15s reason to care
+  movement: { beat: string; status: 'pass' | 'flag'; note: string }; // Pacing & forward propulsion
+  payoff: { beat: string; status: 'pass' | 'flag'; note: string }; // Complete, satisfying answer delivered
+  ctaLoop: { beat: string; status: 'pass' | 'flag'; note: string }; // Seamless bridge to next step
+  retentionRating: 'Optimal Flow' | 'Needs Trimming';
+}
+
 export interface ScriptHSTSS {
-  topic: string;
+  id?: string;
+  topicTitle?: string;
+  topic?: string;
   category: LifeProblemCategory;
   concept: string;
+  
+  // Novelty & First-Person Lived Storytelling Engine
+  storyArchetype?: StoryNarrativeArchetype;
+  storySetting?: string; // Diverse everyday setting (e.g. "Tuesday afternoon café after signing biggest client", "Rush hour traffic on Ring Road")
+  personalLearningTakeaway?: string; // What the creator personally learned through painful trial & error
   
   // Dual-Character Nakul & Nikhil Dynamic Script
   dialogueScript?: DialogueLine[];
@@ -133,28 +203,29 @@ export interface ScriptHSTSS {
   directingGuide?: DualActorDirectingGuide;
 
   // H - Hook
-  hook: {
+  hook?: {
     ideaCollision: string;
-    alternateCollisionOptions: [string, string, string];
+    alternateCollisionOptions: [string, string, string] | string[];
     buildToElevenSeconds: string;
   };
   
   // S - Stakes
-  stakes: {
+  stakes?: {
     lowestPointStory: string;
     visceralBodyFeeling: string;
-    twoAmInternalDialogue: string;
+    internalCrisisDialogue?: string;
+    twoAmInternalDialogue?: string; // Backward compatibility alias
   };
   
   // T - Turn
-  turn: {
+  turn?: {
     livedRealization: string;
     sanatanTeachingIntegrated: string;
     momentOfLevityOrJoy: string;
   };
   
   // S - Scene
-  scene: {
+  scene?: {
     sensoryDetails: string;
     roomAndLight: string;
     tangibleAnchors: string; // e.g. chai cup, sound of bell, traffic
@@ -162,20 +233,32 @@ export interface ScriptHSTSS {
   };
   
   // S - Shatter
-  shatter: {
+  shatter?: {
     micDropQuote: string;
     quotableLines: string[];
   };
   
   // CTA Ladder (strictly in sequence for YouTube)
-  ctaLadder: {
+  ctaLadder?: {
     step1_share: string;
     step2_consult: string; // General spiritual healing / life coaching consultation framed around this problem
     step3_nextVideo: string;
   };
+
+  // 1. StoryBrand (SB7) Hero / Guide CTA Framework
+  storyBrandCTA?: StoryBrandCTA;
+
+  // 2. PAS / PASO Framework for Orbit Content & 60-90s Shorts
+  pasoOrbitShort?: PasoOrbitShort;
+
+  // 3. ABT (And, But, Therefore) Narrative Diagnostic Test (Randy Olson)
+  abtDiagnostic?: ABTDiagnostic;
+
+  // 4. Universal Retention Structure (4-Beat Sanity Check)
+  universalRetentionCheck?: UniversalRetentionCheck;
   
-  // Repurposed 60-90s Short
-  shortScript: {
+  // Repurposed 60-90s Short (legacy compatibility & PASO mapping)
+  shortScript?: {
     duration: string;
     hook: string;
     stakes: string;
@@ -186,7 +269,7 @@ export interface ScriptHSTSS {
   };
   
   // 5 on-screen text / caption lines for video editors
-  editorCaptions: [string, string, string, string, string];
+  editorCaptions?: [string, string, string, string, string] | string[];
 }
 
 export interface SEOMetadata {
@@ -243,8 +326,8 @@ export interface CalendarItem {
   date: string; // YYYY-MM-DD
   dayOfWeek: string;
   festivalOrTithi?: string;
-  platform: 'YouTube' | 'Instagram/Facebook' | 'Pinterest' | 'Meta/Stories' | 'Quora/Reddit';
-  contentType: 'Long-form Video' | 'Short/Reel' | 'Carousel' | 'Pinterest Pin' | 'Pre-Launch Hype' | 'Community Q&A';
+  platform: 'YouTube' | 'Instagram/Facebook' | 'Pinterest' | 'Meta/Stories' | 'Quora' | 'Quora/Reddit';
+  contentType: 'Long-form Video' | 'Short/Reel' | 'Carousel' | 'Pinterest Pin' | 'Pre-Launch Hype' | 'Community Q&A' | 'Quora Marketing' | 'Quora Answer';
   title: string;
   category: LifeProblemCategory;
   status: 'Idea' | 'Scripted' | 'Shot' | 'Scheduled' | 'Live';
@@ -292,8 +375,10 @@ export interface PerformanceFeedbackLog {
   saves?: number;
   consultationClicksOrInquiries?: number;
   consultationClicks?: number;
-  userObservations?: string; // e.g., "The hook about 2am insomnia resonated strongly; comments flooded with questions on heart chakra"
+  userObservations?: string; // e.g., "The hook about payday freeze resonated strongly; comments flooded with questions on root chakra"
   userNotes?: string;
+  whatWorked?: string; // Specific line, concept delivery, thumbnail style that succeeded
+  whatFailed?: string; // Drop-off cause, pacing lull, or audience confusion
   aiLearnedInsights?: string;
 }
 
@@ -309,5 +394,47 @@ export interface LearningSystemState {
   hookFormulaEffectiveness: { formula: string; winRate: number; recommendation: string }[];
   seoLessons: string[];
   strategicAdjustments: string[];
+  lastUpdated: string;
+}
+
+export interface AutoPilotSchedulingReasoning {
+  selectedSprint: string;
+  anchorReleaseDate: string;
+  dayOfWeek: string;
+  whyThisDate: string;
+  festivalOrTithiAlignment?: string;
+  categoryBalanceImpact: string;
+  satellitesGeneratedCount: number;
+}
+
+export interface AutoPilotRunResult {
+  brief: string;
+  topic: TopicIdea;
+  calendarItems: CalendarItem[];
+  anchorDate: string;
+  scriptPackage: ScriptPackage;
+  seoPackage?: SEOMetadata;
+  pinterestPackage?: PinterestPackage;
+  schedulingReasoning: AutoPilotSchedulingReasoning;
+  persistedToDatabase: boolean;
+  timestamp: string;
+}
+
+export interface CreatorMindsetRule {
+  id: string;
+  category: 'voice_and_tone' | 'hook_psychology' | 'spiritual_grounding' | 'format_and_pacing' | 'creator_obsession';
+  rule: string;
+  sourceIdeaOrBrief?: string;
+  learnedAt: string;
+}
+
+export interface CreatorMindsetProfile {
+  creatorArchetype: string;
+  learnedRules: CreatorMindsetRule[];
+  recurringThemes: string[];
+  nakulDirectingNotes: string[];
+  nikhilDirectingNotes: string[];
+  customMindsetGuidance: string;
+  totalIdeasLearnedFrom: number;
   lastUpdated: string;
 }

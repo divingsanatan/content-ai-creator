@@ -12,12 +12,17 @@ import {
   BarChart3,
   BookOpen,
   Menu,
-  X
+  X,
+  Database,
+  Zap,
+  Layers
 } from 'lucide-react';
 import { TopicIdea } from '../types';
 
 export type ActiveModule = 
   | 'dashboard' 
+  | 'auto_pilot'
+  | 'ideas_flow'
   | 'module1_strategy' 
   | 'module2_trends' 
   | 'module3_topics' 
@@ -33,6 +38,7 @@ interface NavbarProps {
   activeTopic: TopicIdea | null;
   topics: TopicIdea[];
   onSelectTopic: (topic: TopicIdea) => void;
+  onOpenSupabaseModal?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -40,7 +46,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectModule,
   activeTopic,
   topics,
-  onSelectTopic
+  onSelectTopic,
+  onOpenSupabaseModal
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -130,6 +137,57 @@ export const Navbar: React.FC<NavbarProps> = ({
               </select>
             </div>
 
+            {/* Auto-Pilot Direct Pipeline Button */}
+            <button
+              type="button"
+              id="navbar-autopilot-btn"
+              onClick={() => handleModuleSelect('auto_pilot')}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-xs font-semibold transition cursor-pointer shrink-0 ${
+                activeModule === 'auto_pilot'
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-xs'
+                  : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-500/40 hover:border-amber-500/60'
+              }`}
+              title="Autonomous Pipeline: Input Brief -> Auto-Schedule & Dual Script Flow"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+              <span className="hidden sm:inline font-bold">Auto-Pilot</span>
+              <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-400/20 text-amber-300 hidden md:inline">AI</span>
+            </button>
+
+            {/* Ideas & Flow Direct Button */}
+            <button
+              type="button"
+              id="navbar-ideasflow-btn"
+              onClick={() => handleModuleSelect('ideas_flow')}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded border text-xs font-semibold transition cursor-pointer shrink-0 ${
+                activeModule === 'ideas_flow'
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-bold shadow-xs'
+                  : 'bg-[#0A0C10] hover:bg-slate-900 text-slate-200 border-slate-800 hover:border-slate-700'
+              }`}
+              title="Ideas & Schedule Flow: See all generated ideas, the entire flow around them, and drop dates"
+            >
+              <Layers className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="hidden sm:inline font-medium">Ideas & Flow</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                {topics.length}
+              </span>
+            </button>
+
+            {/* Supabase Link Button */}
+            {onOpenSupabaseModal && (
+              <button
+                type="button"
+                id="navbar-supabase-link-btn"
+                onClick={onOpenSupabaseModal}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-slate-800 bg-[#0A0C10] hover:bg-slate-900 hover:border-slate-700 text-xs text-slate-300 transition cursor-pointer shrink-0"
+                title="Supabase PostgreSQL Cloud Storage Link"
+              >
+                <Database className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span className="hidden sm:inline font-medium">Supabase</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+              </button>
+            )}
+
             {/* Mobile Hamburger Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -146,6 +204,35 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#0A0C10] border-b border-slate-800 px-4 py-3 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
           <div>
+            <button
+              onClick={() => handleModuleSelect('auto_pilot')}
+              className={`w-full flex items-center justify-center gap-2 p-2.5 rounded text-xs font-semibold mb-2 transition cursor-pointer ${
+                activeModule === 'auto_pilot'
+                  ? 'bg-amber-500 text-slate-950 border border-amber-400 font-bold'
+                  : 'bg-amber-500/15 text-amber-300 border border-amber-500/40 hover:bg-amber-500/25'
+              }`}
+            >
+              <Zap className="w-4 h-4 fill-current" />
+              <span>⚡ Autonomous Pipeline (Brief → Script)</span>
+            </button>
+
+            <button
+              onClick={() => handleModuleSelect('ideas_flow')}
+              className={`w-full flex items-center justify-between p-2.5 rounded text-xs font-semibold mb-2.5 transition cursor-pointer ${
+                activeModule === 'ideas_flow'
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                  : 'bg-slate-900 text-slate-200 border border-slate-800 hover:bg-slate-800'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Layers className="w-4 h-4 text-amber-400" />
+                <span>💡 Generated Ideas & Schedule Flow</span>
+              </div>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+                {topics.length} Ideas
+              </span>
+            </button>
+
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1.5">
               Pipeline Creation Flow (1-6)
             </span>
@@ -198,6 +285,23 @@ export const Navbar: React.FC<NavbarProps> = ({
               })}
             </div>
           </div>
+
+          {onOpenSupabaseModal && (
+            <div className="border-t border-slate-800 pt-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenSupabaseModal();
+                }}
+                className="w-full flex items-center justify-center gap-2 p-2 rounded text-xs bg-slate-900 border border-slate-800 hover:border-emerald-500/50 text-slate-200 transition cursor-pointer"
+              >
+                <Database className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Supabase Database Link & Cloud Sync</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -207,7 +311,38 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center justify-between gap-3 min-w-max">
             {/* 6 Creation Flow Stages (Child 1 - Shrink Protected) */}
             <div className="flex items-center gap-1 shrink-0">
-              <span className="text-[10px] font-mono text-slate-400 hidden 2xl:inline-block pr-1.5 border-r border-slate-800 mr-1">
+              <button
+                id="nav-auto_pilot"
+                onClick={() => onSelectModule('auto_pilot')}
+                className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 text-xs font-semibold rounded transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeModule === 'auto_pilot'
+                    ? 'text-slate-950 bg-amber-400 border border-amber-300 font-bold shadow-xs'
+                    : 'text-amber-300 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 fill-current shrink-0" />
+                <span>Auto-Pilot</span>
+                <span className="hidden xl:inline text-[10px] opacity-85 font-mono">(Brief → Flow)</span>
+              </button>
+
+              <button
+                id="nav-ideas_flow"
+                onClick={() => onSelectModule('ideas_flow')}
+                className={`flex items-center gap-1.5 px-2.5 lg:px-3 py-1.5 text-xs font-semibold rounded transition-all duration-150 cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeModule === 'ideas_flow'
+                    ? 'text-slate-950 bg-amber-400 border border-amber-300 font-bold shadow-xs'
+                    : 'text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30'
+                }`}
+                title="View all generated ideas, the entire flow around them, and their schedule"
+              >
+                <Layers className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>Ideas & Flow</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-400/25 text-amber-300 font-bold">
+                  {topics.length}
+                </span>
+              </button>
+
+              <span className="text-[10px] font-mono text-slate-400 hidden 2xl:inline-block px-1.5 border-r border-slate-800 mr-1">
                 Flow:
               </span>
               {flowStages.map((item) => {

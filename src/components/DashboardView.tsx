@@ -42,6 +42,7 @@ import {
 } from '../types';
 import { HINDU_CALENDAR_EVENTS, CATEGORY_LABELS } from '../data/sanatanCalendar';
 import { ActiveModule } from './Navbar';
+import { useCategories } from '../context/CategoryContext';
 
 interface DashboardViewProps {
   topics: TopicIdea[];
@@ -79,33 +80,32 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
   onSelectTopic
 }) => {
-  // Category distribution calculation for <40% rule compliance
-  const categoryCounts: Record<string, number> = {
-    relationships: 0,
-    money_business: 0,
-    mental_health: 0,
-    physical_health: 0,
-    emotional_health: 0,
-  };
+  const { categories, getCategoryMeta } = useCategories();
+
+  // Category distribution calculation for <40% rule compliance (dynamically includes custom categories)
+  const categoryCounts: Record<string, number> = {};
+  categories.forEach((cat) => {
+    categoryCounts[cat.id] = 0;
+  });
 
   calendar.forEach((item) => {
     if (categoryCounts[item.category] !== undefined) {
       categoryCounts[item.category]++;
+    } else {
+      categoryCounts[item.category] = 1;
     }
   });
 
   const totalCalendarItems = calendar.length || 1;
   const categoryChartData = Object.entries(categoryCounts).map(([cat, count]) => {
     const percent = Math.round((count / totalCalendarItems) * 100);
+    const meta = getCategoryMeta(cat);
     return {
       category: cat,
-      label: CATEGORY_LABELS[cat]?.label || cat,
+      label: meta.label,
       count,
       percent,
-      color: cat === 'relationships' ? '#BE185D' :
-             cat === 'money_business' ? '#B45309' :
-             cat === 'mental_health' ? '#1D4ED8' :
-             cat === 'physical_health' ? '#047857' : '#7E22CE'
+      color: meta.chartColor || '#F59E0B'
     };
   });
 
@@ -146,13 +146,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </h2>
               {activeTopic && (
                 <p className="text-xs text-slate-400 mt-1">
-                  Category: <span className="text-amber-400 font-medium capitalize">{CATEGORY_LABELS[activeTopic.category]?.label || activeTopic.category}</span> • 
+                  Category: <span className="text-amber-400 font-medium capitalize">{getCategoryMeta(activeTopic.category).label}</span> • 
                   Hook: <span className="italic text-slate-300">"{activeTopic.hook}"</span>
                 </p>
               )}
             </div>
 
             <div className="flex items-center gap-2.5 shrink-0">
+              <button
+                id="dashboard-autopilot-btn"
+                onClick={() => onNavigate('auto_pilot')}
+                className="px-3.5 py-2 rounded bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-amber-500/20"
+                title="Input a brief, AI will schedule, script, and package everything"
+              >
+                <Zap className="w-3.5 h-3.5 fill-current" />
+                <span>⚡ Auto-Pilot Flow</span>
+              </button>
+
               <button
                 onClick={() => onNavigate('module3_topics')}
                 className="px-3.5 py-2 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
@@ -176,6 +186,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
+          </div>
+
+          {/* Auto-Pilot Quick-Launch Banner */}
+          <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
+                <Zap className="w-5 h-5 text-amber-400 fill-amber-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <span>Autonomous Brief-to-Execution Pipeline</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Auto-Pilot</span>
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Have a topic idea or client observation? Drop a brief and AI will automatically find the best calendar slot, align Hindu tithis, schedule the 6-day satellite orbit, and generate the complete Nakul & Nikhil Hinglish dual script.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => onNavigate('auto_pilot')}
+              className="px-3.5 py-1.5 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shrink-0 shadow-xs"
+            >
+              <span>Launch Auto-Pilot Studio</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           {/* Connected 6-Stage Flow Grid */}
@@ -601,7 +636,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
           <div className="p-3.5 bg-slate-900/50 border border-slate-800 border-l-2 border-l-amber-500">
             <span className="text-[11px] font-mono text-amber-500 block">Script Retention Factor</span>
-            <h4 className="text-sm font-semibold text-white mt-1">2am Physical Stakes</h4>
+            <h4 className="text-sm font-semibold text-white mt-1">Somatic Physical Stakes</h4>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">Naming exact somatic visceral feelings (stomach clenching, palpitations) holds 68% audience past the 3-minute mark.</p>
             <span className="inline-block mt-3 text-[10px] font-mono font-semibold text-purple-400 bg-purple-950/40 border border-purple-800 px-2 py-0.5 rounded">
               High Watch Time

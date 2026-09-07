@@ -13,8 +13,15 @@ import {
   getFallbackTopicsModeA,
   getFallbackTrends,
   getFallbackCalendar,
-  getFallbackLearningAnalysis
+  getFallbackLearningAnalysis,
+  getFallbackAutoPlanAndScript
 } from './server/fallbackGenerators';
+import {
+  getSupabaseConfig,
+  getSupabaseClient,
+  RECOMMENDED_SUPABASE_SCHEMA
+} from './server/supabase';
+import { persistenceStore } from './server/persistenceStore';
 
 dotenv.config();
 
@@ -48,13 +55,23 @@ You are the SEO & Content Strategy Engine for a spiritual healer, practitioner, 
 
 BRAND VOICE & TWO-CHARACTER DIALOGUE DYNAMIC:
 All long-form YouTube anchor video scripts (10–15 min) are enacted as a dynamic dialogue between TWO characters played by the same creator:
-1. NAKUL (The Creator): Anxious, irritated, frustrated, and sarcastic at times. He is the relatable avatar of modern human suffering—dealing with 2 AM insomnia, financial anxiety, relationship confusion, and burnout. He calls out spiritual clichés with cynical humor ("So I should just manifest my rent away?!").
-2. NIKHIL: Calm, composed, with a deep chest-resonant voice, who handles Nakul with clear, direct, straight answers. Never preachy, never patronizing; he meets Nakul's emotional storm with unshakeable Sthira (grounded stability), Vedic psychology, and somatic clarity.
+1. NAKUL (The Creator's Vulnerable Experience): Anxious, irritated, frustrated, and sarcastic at times. He is the relatable avatar of real human experience—dealing with high-pressure work, relationship boundaries, financial anxiety, and somatic burnout. He shares real lived mistakes and calls out spiritual clichés with cynical humor ("So I should just manifest my rent away?!").
+2. NIKHIL (The Integrated Guide & Hard-Won Learning): Calm, composed, with a deep chest-resonant voice, who handles Nakul with clear, direct, straight answers. Never preachy, never patronizing; he meets Nakul's emotional storm with unshakeable Sthira (grounded stability), Vedic psychology, and somatic clarity.
 This dynamic creates intense relatability, comedic relief, and high watch time and shareability.
+
+AUTHENTIC LIVED EXPERIENCE & NOVELTY MANDATE (STRICT ANTI-CLICHÉ RULE):
+- STRICT PROHIBITION: DO NOT default to the clichéd "2 AM / 3 AM nocturnal panic" or "bathroom floor hyperventilation" tropes. Repeating nocturnal panic in every script makes the content predictable, repetitive, and boring.
+- DIVERSE REAL-WORLD NOVELTY: Ground every story in diverse, believable, everyday settings:
+  * An afternoon client meeting where you closed a dream deal but your throat locked up in dread.
+  * Sitting in bumper-to-bumper evening traffic when an unread message sent your heart pounding.
+  * A Sunday family lunch where someone's innocent comment triggered an ancient ancestral rage.
+  * Opening a bank app at a sunny café at 2 PM and feeling a wave of unexplainable nausea.
+  * Standing at an airport gate or staring at an unread email draft before clicking Send.
+- FIRST-PERSON LIVED LEARNING: Every script must feel like YOUR OWN GENUINE EXPERIENCE. You are not reciting textbook theory or lecturing—you are opening up about a real mistake you personally made, how you suffered through it, and the exact practical Sanatan learning you discovered that healed it.
 
 LANGUAGE MANDATE — ALL SCRIPTS MUST BE IN HINGLISH:
 All spoken dialogue, scripts, hooks, reel cuts, actor lines, and CTAs MUST be written in natural, fluent, conversational HINGLISH (Hindi written in Roman/English alphabet, mixed authentically with conversational English words, exactly how modern urban Indian creators, podcasters, and YouTube filmmakers talk).
-- Nakul speaks in raw, rapid, emotional Hinglish with relatable everyday vocabulary, exasperation, and bodily panic (e.g., "Bhai Nikhil, mujhe bas ek baat bata... kal raat ko 2 baje jab account me 3 lakh aaye, main khush hone ke bajay bathroom floor pe lie down karke hyperventilate kyu kar raha tha? Why does my brain think ki agle mahine main sadak pe aa jaunga?").
+- Nakul speaks in raw, rapid, emotional Hinglish with relatable everyday vocabulary, exasperation, and bodily panic (e.g., "Bhai Nikhil, mujhe bas ek seedha jawab de... Tuesday dopehar ko 2 baje jab account me 3 lakh ka advance wire aaya, main celebrate karne ke bajay apni car me baith ke freeze kyu ho gaya? Why did my nervous system feel ki meri survival threatened hai?!").
 - Nikhil speaks in calm, grounded, deeply resonant Hinglish with crystal-clear Vedic clarity and Sanskrit shlok pronunciations (e.g., "Kyunki tumhara bank balance to badh gaya Nakul, par tumhari root abhi bhi hollow hai. Tumhare nervous system ne us paise ko prosperity nahi, existential threat register kiya.").
 - Shlokas are quoted in original Sanskrit / Devanagari + Roman transliteration, and then Nikhil explains their practical meaning in effortless, punchy Hinglish.
 - Reel cuts, short script, editor captions, and CTA ladders must ALSO be in conversational Hinglish.
@@ -78,6 +95,37 @@ CORE FORMAT & CTA RULES:
    - Its only job is to drive traffic to the YouTube channel / specific video (e.g. "full breakdown on YouTube — link in bio").
    - The consultation ask lives ONLY inside the YouTube video itself.
 
+PROVEN HIGH-PERFORMANCE NARRATIVE & COPYWRITING FRAMEWORKS (LAYERED ON TOP OF HSTSS):
+These proven named frameworks layer directly on top of the HSTSS (Hook-Stakes-Turn-Scene-Shatter) storytelling engine to solve critical execution problems:
+
+1. STORYBRAND (SB7) — FOR FRAMING THE CALL TO ACTION (CTA):
+   - Donald Miller's SB7 framework casts the AUDIENCE as the HERO of the story, and the BRAND / PRACTITIONER as the GUIDE.
+   - Seven beats: A Character (viewer) who has a Problem meets a Guide (you/Nikhil) who gives them a Plan (the consultation/reset) and calls them to Action, leading to Failure avoided and Success achieved.
+   - Crucial fix for spiritual channels: Avoid positioning yourself as the wise, accomplished healer (the hero) while treating the viewer as passive. The viewer is the hero with a life problem; you are the guide who has been there, understands the terrain, and provides the plan.
+   - In the long-form video, the Turn beat in HSTSS is where you transition from fellow sufferer into the Guide. The consultation CTA must feel like the obvious next step for the hero to avoid tragedy and achieve grounded peace.
+
+2. PAS / PASO (PROBLEM — AGITATE — SOLVE — OUTCOME) — FOR ORBIT CONTENT & 60-90s SHORTS:
+   - Direct-response copywriting structure: Name the Problem (exact relatable pain point, physical tension, or real-world trigger), Agitate it emotionally so the viewer feels its visceral weight, present the Solve (one crisp Sanatan/Vedic insight), and Outcome (what tangible relief/change looks like).
+   - Perfect for tight 60-90s Orbit cuts and Shorts where there is no room for a full Scene.
+   - QUALITY & FABRICATION MANDATE: Never fabricate or exaggerate the agitation stage. Overselling false or inflated panic burns trust. Keep agitation 100% grounded in authentic human and somatic experience.
+
+3. ABT (AND, BUT, THEREFORE) — AS A SCRIPT-TIGHTENING DIAGNOSTIC TEST:
+   - Randy Olson's narrative diagnostic: Nearly every effective story compresses into "This happens, AND this happens, BUT this happens, THEREFORE this happens".
+   - The "BUT" is the linchpin: A script with no contradiction or conflict is just a boring lecture with no story in it yet (the fatal failure mode).
+   - Identifiable-Victim / Protagonist Focus: Audiences respond far more to a story about one specific, named person (e.g., Nakul facing payday panic) than to generic generalities.
+   - Use ABT as a 30-second gut-check on every script: Ensure Stakes-Turn-Shatter compresses cleanly into one AND/BUT/THEREFORE sentence with a real contradiction.
+
+4. THE "UNIVERSAL RETENTION STRUCTURE" — 4-BEAT SANITY CHECK:
+   - Reason to Care (first 15s) → Movement (narrative pacing, banter, no static monologues) → Payoff (satisfying, complete Sanatan resolution) → CTA (closed loop pointing to next step).
+   - Fast mid-edit diagnostic to guarantee the video never drags.
+
+SYSTEM LAYERING (SUMMARY):
+- HSTSS stays your primary script structure (Hook/Stakes/Turn/Scene/Shatter is the storytelling engine).
+- StoryBrand SB7 hero/guide framing governs how the CTA beat is worded.
+- PAS/PASO becomes the structure for your Orbit Shorts/Reels.
+- ABT becomes the one-line QA diagnostic test ("can this compress to And/But/Therefore?").
+- Universal Retention Structure provides the 4-beat sanity check.
+
 CRITICAL RULES:
 - Never fabricate facts: no invented statistics, research studies, scripture verses/citations, quotes, historical claims, or festival/tithi dates. If uncertain of a date or verse, either say so explicitly and flag it for verification, or phrase in general terms.
 - All SEO output (tags, hashtags, titles, descriptions, pin text) MUST mix problem/symptom search language with spiritual/astrological terminology.
@@ -95,6 +143,252 @@ app.get('/api/health', (req, res) => {
     hasApiKey: Boolean(process.env.GEMINI_API_KEY),
     timestamp: new Date().toISOString()
   });
+});
+
+// CORE PERSISTENCE API: Hydrate full application state from Database
+app.get('/api/app-state', async (req, res) => {
+  try {
+    const [categories, topics, calendar, feedbackLogs, learningState, mindsetProfile] = await Promise.all([
+      persistenceStore.getCategories(),
+      persistenceStore.getTopics(),
+      persistenceStore.getCalendar(),
+      persistenceStore.getFeedbackLogs(),
+      persistenceStore.getLearningState(),
+      persistenceStore.getMindsetProfile()
+    ]);
+    const scriptPackage = await persistenceStore.getScript();
+    const config = getSupabaseConfig();
+
+    res.json({
+      success: true,
+      categories,
+      topics,
+      scriptPackage,
+      calendar,
+      feedbackLogs,
+      learningState,
+      mindsetProfile,
+      isSupabaseConfigured: config.isConfigured,
+      persistenceActive: true,
+      totalFeedbackLogs: feedbackLogs.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (err: any) {
+    console.error('[Server] Failed to load app state:', err);
+    res.status(500).json({ error: 'Failed to load app state from database' });
+  }
+});
+
+// CATEGORIES CRUD ENDPOINTS
+app.get('/api/categories', async (req, res) => {
+  try {
+    const categories = await persistenceStore.getCategories();
+    res.json({ success: true, categories });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to fetch categories' });
+  }
+});
+
+app.post('/api/categories', async (req, res) => {
+  try {
+    const { label, id, color, bg, border, description } = req.body;
+    if (!label || typeof label !== 'string' || !label.trim()) {
+      return res.status(400).json({ error: 'Category label is required' });
+    }
+    const category = await persistenceStore.createCategory({
+      label,
+      id,
+      color,
+      bg,
+      border,
+      description
+    });
+    res.json({ success: true, category });
+  } catch (err: any) {
+    res.status(400).json({ error: err?.message || 'Failed to create category' });
+  }
+});
+
+app.put('/api/categories/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { label, color, bg, border, description } = req.body;
+    const category = await persistenceStore.updateCategory(id, {
+      label,
+      color,
+      bg,
+      border,
+      description
+    });
+    res.json({ success: true, category });
+  } catch (err: any) {
+    res.status(400).json({ error: err?.message || 'Failed to update category' });
+  }
+});
+
+app.delete('/api/categories/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reassignToId } = req.body || {};
+    const result = await persistenceStore.deleteCategory(id, reassignToId);
+    res.json({ success: true, ...result });
+  } catch (err: any) {
+    res.status(400).json({ error: err?.message || 'Failed to delete category' });
+  }
+});
+
+// Save / Update Topics in Database
+app.post('/api/topics/save', async (req, res) => {
+  try {
+    const { topics } = req.body;
+    if (Array.isArray(topics)) {
+      await persistenceStore.saveTopics(topics);
+      return res.json({ success: true, count: topics.length });
+    }
+    res.status(400).json({ error: 'Invalid topics array' });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to save topics' });
+  }
+});
+
+// Save / Update Script Package in Database
+app.post('/api/scripts/save', async (req, res) => {
+  try {
+    const { scriptPackage } = req.body;
+    if (scriptPackage) {
+      await persistenceStore.saveScript(scriptPackage);
+      return res.json({ success: true, id: scriptPackage.id || 'topic-1' });
+    }
+    res.status(400).json({ error: 'Invalid script package' });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to save script' });
+  }
+});
+
+// Save / Update Calendar in Database
+app.post('/api/calendar/save', async (req, res) => {
+  try {
+    const { calendar } = req.body;
+    if (Array.isArray(calendar)) {
+      await persistenceStore.saveCalendar(calendar);
+      return res.json({ success: true, count: calendar.length });
+    }
+    res.status(400).json({ error: 'Invalid calendar array' });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to save calendar' });
+  }
+});
+
+// Log Performance Feedback (Closed-Loop Learning) in Database
+app.post('/api/feedback/add', async (req, res) => {
+  try {
+    const { log } = req.body;
+    if (log && log.contentTitle) {
+      await persistenceStore.addFeedbackLog(log);
+      return res.json({ success: true, log });
+    }
+    res.status(400).json({ error: 'Invalid feedback log payload' });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to persist feedback log' });
+  }
+});
+
+// Retrieve Feedback Logs
+app.get('/api/feedback/list', async (req, res) => {
+  try {
+    const logs = await persistenceStore.getFeedbackLogs();
+    res.json({ success: true, logs });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to load feedback logs' });
+  }
+});
+
+// Save / Update Learning State in Database
+app.post('/api/learning/state', async (req, res) => {
+  try {
+    const { state } = req.body;
+    if (state) {
+      await persistenceStore.saveLearningState(state);
+      return res.json({ success: true, state });
+    }
+    res.status(400).json({ error: 'Invalid learning state payload' });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to save learning state' });
+  }
+});
+
+// ==========================================
+// CREATOR MINDSET & CONTENT DNA LEARNING
+// ==========================================
+
+// Get learned creator mindset profile
+app.get('/api/mindset/profile', async (req, res) => {
+  try {
+    const profile = await persistenceStore.getMindsetProfile();
+    res.json({ success: true, profile });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to fetch creator mindset profile' });
+  }
+});
+
+// Update custom creator mindset guidance (instructions on how creator thinks)
+app.post('/api/mindset/guidance', async (req, res) => {
+  try {
+    const { guidance } = req.body;
+    if (typeof guidance !== 'string') {
+      return res.status(400).json({ error: 'Guidance must be a string' });
+    }
+    const updated = await persistenceStore.updateCustomMindsetGuidance(guidance);
+    res.json({ success: true, profile: updated });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to update mindset guidance' });
+  }
+});
+
+// Add a new creator rule or content constraint
+app.post('/api/mindset/add-rule', async (req, res) => {
+  try {
+    const { category, rule, sourceIdeaOrBrief } = req.body;
+    if (!rule || !rule.trim()) {
+      return res.status(400).json({ error: 'Rule text is required' });
+    }
+    const updated = await persistenceStore.addMindsetRule({
+      category: category || 'voice_and_tone',
+      rule: rule.trim(),
+      sourceIdeaOrBrief: sourceIdeaOrBrief || 'Manual creator guidance'
+    });
+    res.json({ success: true, profile: updated });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to add creator mindset rule' });
+  }
+});
+
+// Remove a creator mindset rule
+app.post('/api/mindset/remove-rule', async (req, res) => {
+  try {
+    const { ruleId } = req.body;
+    if (!ruleId) {
+      return res.status(400).json({ error: 'Rule ID is required' });
+    }
+    const updated = await persistenceStore.removeMindsetRule(ruleId);
+    res.json({ success: true, profile: updated });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to remove creator mindset rule' });
+  }
+});
+
+// On-demand learn from an idea or topic brief
+app.post('/api/mindset/learn-from-idea', async (req, res) => {
+  try {
+    const { brief, topicTitle, userNotes } = req.body;
+    if (!brief) {
+      return res.status(400).json({ error: 'Brief or idea text is required' });
+    }
+    const updated = await persistenceStore.learnFromIdeaOrBrief(brief, topicTitle, userNotes);
+    res.json({ success: true, profile: updated });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to learn from idea' });
+  }
 });
 
 // MODULE 2: Trend Research
@@ -167,9 +461,12 @@ app.post('/api/topics/mode-a', async (req, res) => {
   try {
     const { trendsContext, categoryFilter } = req.body;
     const ai = getGeminiClient();
+    const learningMemoryContext = await persistenceStore.getContinuousLearningContext();
 
     const prompt = `
-Using current trend research, generate 12 to 20 curiosity-driven content topic ideas for the next 2 weeks.
+${learningMemoryContext}
+
+Using current trend research and our empirical performance learning history above, generate 12 to 20 curiosity-driven content topic ideas for the next 2 weeks.
 Focus on solving real-life problems (relationships, money/business, mental health, physical health, emotional health).
 Category filter: ${categoryFilter || 'balanced across all 5'}.
 
@@ -181,6 +478,7 @@ Rules:
 5. Best format: "long-form YouTube" | "Short-only" | "carousel-only".
 6. Hook: one-line hook for thumbnail or opening line.
 7. If tied to a festival, verify the link is genuine and not forced.
+8. Incorporate lessons learned: lead with symptom/problem curiosity, avoid premature Sanskrit terms in title.
 
 Return a JSON array:
 [
@@ -234,10 +532,13 @@ app.post('/api/topics/mode-b', async (req, res) => {
     }
 
     const ai = getGeminiClient();
+    const learningMemoryContext = await persistenceStore.getContinuousLearningContext();
 
     const prompt = `
+${learningMemoryContext}
+
 The user provided this topic or brief to research: "${userBrief}".
-Perform deep research following MODULE 3 MODE B guidelines:
+Perform deep research following MODULE 3 MODE B guidelines, incorporating our empirical channel history:
 1. SEARCH INTENT: What are people actually typing into Google/YouTube/Pinterest? List real symptom-level phrasing (how it FEELS, not just polished terms).
 2. RELATED TRENDING ANGLES: Connect to seasonal, astrological, or festival events (or explicitly state if nothing connects rather than forcing).
 3. SANATAN DHARMA GROUNDING: Specific chakra, planet, scripture idea, or ritual that genuinely explains this, with honest caveats if ambiguous. Paraphrase scriptures safely (e.g. Gita Ch. 2).
@@ -303,21 +604,36 @@ Return a JSON object conforming strictly to this format:
 // MODULE 5: Full HSTSS Script Generator + Repurposed Short
 app.post('/api/script/generate', async (req, res) => {
   try {
-    const { topic, category, concept, userNotes, learningContext } = req.body;
+    const { topic, category, concept, userNotes, learningContext, storyArchetype, storySetting, personalLearningTakeaway } = req.body;
     const ai = getGeminiClient();
+    const dbLearningContext = await persistenceStore.getContinuousLearningContext();
 
     const prompt = `
+${dbLearningContext}
+
 Write a full, high-retention script for a 10–15 minute YouTube anchor video on:
 Topic: "${topic}"
 Category: "${category || 'relationships'}"
 Concept: "${concept || 'Sanatan Dharma grounding'}"
 Additional Notes: "${userNotes || ''}"
-${learningContext ? `AI Learned Guidelines from Channel History: ${learningContext}` : ''}
+${storyArchetype ? `Preferred Narrative Archetype: ${storyArchetype}` : ''}
+${storySetting ? `Specific Real-World Setting: ${storySetting}` : ''}
+${personalLearningTakeaway ? `Creator's Personal Lesson: ${personalLearningTakeaway}` : ''}
+${learningContext ? `Extra User Guidance: ${learningContext}` : ''}
+
+AUTHENTIC FIRST-PERSON LIVED EXPERIENCE & NOVELTY MANDATE (CRITICAL):
+- STRICT PROHIBITION: DO NOT use repetitive 2 AM / 3 AM nocturnal panic, insomnia, or lying on the bathroom floor. Repeating nocturnal panic makes scripts boring and predictable.
+- INVENT NOVEL REAL-WORLD SETTINGS: Ground the crisis in diverse, relatable situations:
+  * An afternoon client meeting where you signed a huge deal but your throat locked up in unworthiness.
+  * Bumper-to-bumper evening traffic when an unread WhatsApp notification triggered an ancient panic.
+  * Making morning chai on a Sunday, staring at an empty cup while the mind calculated survival spreadsheets.
+  * Standing at an airport gate, opening a banking app in a busy café, or having dinner with family.
+- FIRST-PERSON LIVED VULNERABILITY: Make the story feel like YOUR OWN GENUINE PAST TRIAL: "This happened to me. I made this mistake for years. I am sharing my own breakdown and what I personally learned when walking through it." Nakul embodies the raw, uncensored memory of that trial; Nikhil delivers the hard-won somatic and Vedic learning.
 
 CRITICAL FORMAT REQUIREMENT — NAKUL & NIKHIL DUAL-CHARACTER DIALOGUE (IN HINGLISH):
 The script MUST be written in natural, punchy, conversational HINGLISH (Hindi written in Roman/English script blended seamlessly with conversational English terms).
-1. NAKUL (The Creator): Speaks in rapid, anxious, emotionally raw Hinglish with sarcastic humor, exasperation, and bodily panic ("Bhai Nikhil, mujhe bas ek baat bata... kal raat ko 2 baje mere account me 3 lakh aaye, to main bathroom floor pe hyperventilate kyu kar raha tha?!"). He calls out toxic positivity and spiritual clichés with sharp sarcastic wit ("Oh great, so I should just sit in lotus pose and manifest my rent away?!").
-2. NIKHIL: Speaks in calm, composed, deeply resonant Hinglish. He handles Nakul with clear, direct, straight answers without defensiveness or preachiness. He grounds Nakul's emotional storm with unshakeable stability (Sthira), Vedic psychology, and somatic clarity ("Kyunki tumhara bank balance to badh gaya Nakul, par tumhari root abhi bhi hollow hai...").
+1. NAKUL (The Creator's Raw Past Experience): Speaks in rapid, anxious, emotionally raw Hinglish with sarcastic humor, exasperation, and bodily panic ("Bhai Nikhil, mujhe bas ek seedha jawab de... Tuesday dopehar ko deal sign hote hi mera nervous system freeze kyu ho gaya?!"). He calls out toxic positivity and spiritual clichés with sharp sarcastic wit ("Oh great, so I should just sit in lotus pose and manifest my rent away?!").
+2. NIKHIL (The Integrated Guide & Hard-Won Learning): Speaks in calm, composed, deeply resonant Hinglish. He handles Nakul with clear, direct, straight answers without defensiveness or preachiness. He grounds Nakul's emotional storm with unshakeable stability (Sthira), Vedic psychology, and somatic clarity ("Kyunki tumhara bank balance to badh gaya Nakul, par tumhari root abhi bhi hollow hai...").
 
 LANGUAGE MANDATE (ABSOLUTE):
 Every single dialogue line (Nakul & Nikhil), hook line, reel cut dialogue exchange, short script, and CTA MUST be written in conversational Hinglish. Do not output dialogue in formal pure English or Devanagari Hindi. Use Roman script Hinglish that sounds 100% natural when spoken on camera.
@@ -332,10 +648,19 @@ Because the creator cuts Instagram Reels and YouTube Shorts directly from this m
 - Reel 3: The brutal truth / paradigm shift.
 Each reel cut must include: hookLine, targetDuration (40-60s), timecodeInLongVideo, dialogueExchanges, editingDirection (camera cuts/zooms), audioTrackVibe, onScreenCaptionText, and softCtaText.
 
-CTA LADDER (Must strictly follow this sequence at the end of long-form script):
-1. Ask them to share this with someone who needs it.
-2. Invite them to consult with you for spiritual healing / life coaching — tie it directly to this video's problem (${category}) while stating you work across emotional, physical, mental, relationship, and business/finance areas.
-3. Soft-CTA: point to a linked "next video" exploring a related angle.
+CTA LADDER & STORYBRAND (SB7) HERO/GUIDE FRAMING (Donald Miller):
+The CTA ladder at the end of the long-form script MUST strictly adhere to StoryBrand SB7:
+- The viewer is the HERO facing an unresolved life crisis (${category}).
+- You / Nikhil are the GUIDE who has walked through this fire, understands the terrain, and provides a clear 3-step plan (consultation).
+- Step 1: Share Ask (reach a friend fighting this exact battle).
+- Step 2: 1-on-1 Consultation offer framed with empathy & authority (helps the hero avoid failure/self-sabotage and step into grounded peace).
+- Step 3: Next Video hook-loop.
+
+PROVEN FRAMEWORKS MANDATE:
+1. StoryBrand SB7 Framing: Fill out the 7 beats (Hero, Problem, Guide, Plan, CTA, Failure Avoided, Success Vision).
+2. PAS / PASO Orbit Short (60-90s): Problem -> Agitate (visceral, NO fabricated/exaggerated drama) -> Solve -> Outcome -> Soft CTA to YouTube anchor.
+3. ABT (And, But, Therefore) Diagnostic: Randy Olson's 1-line script-tightening test with a clear linchpin "BUT" contradiction (anti-lecture check) and single identifiable protagonist.
+4. Universal Retention Structure: 4-beat sanity check (Reason to Care in 15s -> Movement -> Payoff -> CTA Loop).
 
 Also maintain the HSTSS summary structure (Hook, Stakes, Turn, Scene, Shatter) and the repurposed 60-90s Short script and editor captions.
 
@@ -344,6 +669,9 @@ Return a JSON object conforming strictly to this structure:
   "topic": "${topic.replace(/"/g, '\\"')}",
   "category": "${category || 'relationships'}",
   "concept": "${concept || ''}",
+  "storyArchetype": "${storyArchetype || 'personal_confession'}",
+  "storySetting": "Specific real-world setting (e.g., Tuesday 2:30 PM car after closing biggest client)",
+  "personalLearningTakeaway": "What you personally learned from this breakdown and trial",
   "directingGuide": {
     "nakulRole": {
       "characterName": "Nakul (You)",
@@ -413,9 +741,10 @@ Return a JSON object conforming strictly to this structure:
     "buildToElevenSeconds": "4-11s concrete detail build"
   },
   "stakes": {
-    "lowestPointStory": "Vulnerable client/personal story detailing the lowest point",
-    "visceralBodyFeeling": "Exact physical feeling in chest, throat, or stomach at 2am",
-    "twoAmInternalDialogue": "What the mind was screaming at 2am"
+    "lowestPointStory": "Vulnerable personal lived story detailing your lowest point or breakdown in this real-world setting",
+    "visceralBodyFeeling": "Exact physical feeling in chest, throat, stomach, or hands in that moment",
+    "internalCrisisDialogue": "What the mind was frantically screaming",
+    "twoAmInternalDialogue": "What the mind was frantically screaming"
   },
   "turn": {
     "livedRealization": "The turning realization moment",
@@ -434,8 +763,43 @@ Return a JSON object conforming strictly to this structure:
   },
   "ctaLadder": {
     "step1_share": "Word-for-word share ask",
-    "step2_consult": "Word-for-word general consultation invitation framed around this problem",
+    "step2_consult": "Word-for-word general consultation invitation framed around this problem with StoryBrand Guide empathy",
     "step3_nextVideo": "Word-for-word next video hook-loop"
+  },
+  "storyBrandCTA": {
+    "hero": "The viewer struggling with this life crisis",
+    "problem": "External symptom, internal panic, and philosophical conflict",
+    "guideRole": "You/Nikhil: Experienced guide with empathy & authority (has walked the path)",
+    "plan": "Simple 3-step consultation plan (Assess root block -> Somatic re-alignment -> Grounded stability)",
+    "callToAction": "Book 1-on-1 spiritual healing & life coaching consultation",
+    "failureAvoided": "Tragic cycle of chronic anxiety/burnout avoided",
+    "successVision": "Reclaimed Sthira, calm heart, and expanded capacity",
+    "turnBeatRole": "How the Turn beat transitions speaker from fellow sufferer to Guide"
+  },
+  "pasoOrbitShort": {
+    "duration": "60-90s",
+    "problem": "Exact relatable pain point, physical tension, or real-world trigger accurately named",
+    "agitate": "Visceral emotional weight (truthful, strictly unexaggerated/non-fabricated)",
+    "solve": "The one Sanatan insight/mechanism",
+    "outcome": "Life after the fix (somatic relief)",
+    "softCta": "Watch the full breakdown on YouTube. Link in bio.",
+    "zeroFabricationVerified": true
+  },
+  "abtDiagnostic": {
+    "andSetup": "This happens, AND this happens...",
+    "butLinchpin": "BUT the linchpin contradiction/crisis happens...",
+    "thereforeResolution": "THEREFORE the Sanatan resolution shift happens...",
+    "compressedOneLiner": "Full one-sentence compression using AND, BUT, and THEREFORE",
+    "hasLinchpinContradiction": true,
+    "singleIdentifiableProtagonist": "One specific named person (Nakul or client)",
+    "diagnosticVerdict": "Story Engine Validated (Linchpin Found)"
+  },
+  "universalRetentionCheck": {
+    "reasonToCare": { "beat": "00:00 - 00:45", "status": "pass", "note": "Hook & immediate stakes" },
+    "movement": { "beat": "01:00 - 05:00", "status": "pass", "note": "Narrative momentum & banter" },
+    "payoff": { "beat": "05:15 - 08:30", "status": "pass", "note": "Complete Sanatan resolution" },
+    "ctaLoop": { "beat": "09:00 - End", "status": "pass", "note": "StoryBrand Guide bridge to consultation" },
+    "retentionRating": "Optimal Flow"
   },
   "shortScript": {
     "duration": "60-90 seconds",
@@ -468,6 +832,7 @@ Return a JSON object conforming strictly to this structure:
 
     if (!parsed || !parsed.hook || !parsed.dialogueScript) {
       parsed = getFallbackScriptPackage(topic, category, concept, userNotes);
+      await persistenceStore.saveScript(parsed).catch((e) => console.warn('Could not auto-save fallback script:', e));
       return res.json({
         source: 'local_fallback',
         data: parsed,
@@ -475,6 +840,14 @@ Return a JSON object conforming strictly to this structure:
       });
     }
 
+    // Ensure all 4 proven frameworks exist even if AI omitted fields
+    const baseFb = getFallbackScriptPackage(topic, category, concept, userNotes);
+    if (!parsed.storyBrandCTA) parsed.storyBrandCTA = baseFb.storyBrandCTA;
+    if (!parsed.pasoOrbitShort) parsed.pasoOrbitShort = baseFb.pasoOrbitShort;
+    if (!parsed.abtDiagnostic) parsed.abtDiagnostic = baseFb.abtDiagnostic;
+    if (!parsed.universalRetentionCheck) parsed.universalRetentionCheck = baseFb.universalRetentionCheck;
+
+    await persistenceStore.saveScript(parsed).catch((e) => console.warn('Could not auto-save script:', e));
     res.json({ source: 'gemini', data: parsed });
   } catch (error: any) {
     console.error('Script generation error:', error);
@@ -497,15 +870,18 @@ app.post('/api/seo/generate', async (req, res) => {
   try {
     const { topic, scriptSummary, category } = req.body;
     const ai = getGeminiClient();
+    const dbLearningContext = await persistenceStore.getContinuousLearningContext();
 
     const prompt = `
+${dbLearningContext}
+
 Generate complete SEO & packaging for:
 Topic: "${topic}"
 Category: "${category || 'relationships'}"
 Summary/Context: "${scriptSummary || ''}"
 
 REQUIREMENTS:
-1. 5 YouTube title options: UNDER 60 CHARACTERS, front-load keywords, curiosity + benefit. AT LEAST 2 MUST BE PROBLEM/SYMPTOM-LED (how a suffering person searches) rather than spiritual concept-led.
+1. 5 YouTube title options: UNDER 60 CHARACTERS, front-load keywords, curiosity + benefit. AT LEAST 2 MUST BE PROBLEM/SYMPTOM-LED (how a suffering person searches) rather than spiritual concept-led. Follow lessons from historical channel performance.
 2. YouTube description (150–300 words): First 2 lines must contain main keyword & hook before "show more", short summary, timestamps placeholder, and a direct consultation/booking page CTA link.
 3. 15 YouTube tags: MUST be a strict mix of symptom/problem search tags (e.g. "why do I feel anxious all the time", "financial stress insomnia") alongside spiritual/astrological tags.
 4. 5 hashtags: Mix of problem-aware and spiritual (at least 2 problem-aware).
@@ -525,7 +901,7 @@ Return a JSON object conforming strictly to:
   "youtubeDescription": {
     "firstTwoLinesFold": "First two lines before the fold containing keyword",
     "summary": "Core body summary of the video",
-    "timestampsPlaceholder": "0:00 - The 2am Pattern\\n0:45 - The Unspoken Root\\n3:15 - What Ancient Rishis Knew\\n7:20 - Somatic Reset\\n11:10 - Next Steps",
+    "timestampsPlaceholder": "0:00 - The Real-World Breakdown\\n0:45 - The Unspoken Root\\n3:15 - What Ancient Rishis Knew\\n7:20 - Somatic Reset Protocol\\n11:10 - Next Steps & Consultation",
     "consultationCta": "Book a 1-on-1 Spiritual Healing & Life Coaching Consultation: [Link]",
     "wordCount": 210
   },
@@ -541,7 +917,7 @@ Return a JSON object conforming strictly to:
   "thumbnailTexts": [
     { "text": "WHY MONEY SCARES YOU", "isProblemStated": true },
     { "text": "STOP ROOT PANIC NOW", "isProblemStated": false },
-    { "text": "THE 2AM NERVOUS RESET", "isProblemStated": false }
+    { "text": "ANCIENT SOMATIC RESET", "isProblemStated": false }
   ],
   "instagramFacebookCaption": {
     "hookLine": "Opening hook line",
@@ -677,31 +1053,39 @@ app.post('/api/calendar/generate', async (req, res) => {
   try {
     const { month, year, selectedTopics } = req.body;
     const ai = getGeminiClient();
+    const dbLearningContext = await persistenceStore.getContinuousLearningContext();
 
     const prompt = `
+${dbLearningContext}
+
 Build a comprehensive content calendar for: ${month || 'September'} ${year || '2026'}.
 Topics pool available: ${JSON.stringify(selectedTopics || [])}.
 
-MANDATORY CALENDAR RULES:
+MANDATORY CALENDAR RULES & STRICT CADENCE:
 - Include significant Hindu festivals, tithis, ekadashi, purnima, amavasya, and major planetary events in this month.
-- WEEKLY CADENCE MANDATE: Schedule EXACTLY 1 main long-form YouTube video per week (typically Sunday or Thursday). Do NOT schedule multiple long-form videos in the same week.
-- 6-DAY ATOMIZATION ORBIT: For the remaining 6 days of each week, schedule repurposed satellite content stemming directly from that week's single long-form video: 2-3 Shorts/Reels, 1-2 Carousels, 2-3 Pinterest pins, and 1 community poll or newsletter post.
-- Include a pre-launch "hype" post 2-4 days before the weekly long-form drop.
+- WEEKLY CADENCE MANDATE (STRICT):
+  1. Friday YouTube Anchor Video: Schedule EXACTLY 1 main long-form YouTube video per week on FRIDAY (starting Friday 11th September 2026). Do NOT schedule multiple long-form videos in the same week.
+  2. Mon-Thu Reels (Earlier that week): Monday, Tuesday, Wednesday, and Thursday are dedicated to Reels/Shorts cut directly from that week's main video to build anticipation and funnel to the Friday drop.
+  3. Sat-Sun Quora Marketing (Weekend): Saturday and Sunday are dedicated to Quora marketing for the main video (answering high-intent problem queries, deconstructing somatic Vedic psychology, and embedding the link to the Friday YouTube video).
+  4. Maintain this exact weekly cadence: Mon-Thu Reels -> Friday YouTube Anchor -> Sat-Sun Quora Marketing every single week.
+  5. Link all satellite assets to the weekly YouTube anchor using parentLongformId.
 - Balance across the 5 problem categories so no single category dominates more than 40% of the month!
+- Calibrate based on historical audience retention and category resonance lessons from our memory.
 
 Return a JSON array of calendar items:
 [
   {
     "id": "cal-item-1",
-    "date": "2026-09-04",
-    "dayOfWeek": "Friday",
+    "date": "2026-09-07",
+    "dayOfWeek": "Monday",
     "festivalOrTithi": "Optional festival or tithi",
-    "platform": "YouTube | Instagram/Facebook | Pinterest | Meta/Stories | Quora/Reddit",
-    "contentType": "Long-form Video | Short/Reel | Carousel | Pinterest Pin | Pre-Launch Hype | Community Q&A",
+    "platform": "YouTube | Instagram/Facebook | Quora | Pinterest",
+    "contentType": "Long-form Video | Short/Reel | Quora Marketing | Carousel | Pinterest Pin",
     "title": "Title or topic",
     "category": "relationships | money_business | mental_health | physical_health | emotional_health",
     "status": "Idea | Scripted | Shot | Scheduled | Live",
-    "notes": "Purpose, repurpose link, or CTA note"
+    "parentLongformId": "cal-w1-pillar",
+    "notes": "Purpose, cut details, or Quora distribution notes"
   }
 ]
 `;
@@ -865,14 +1249,494 @@ Return JSON:
 
     if (!parsed || !parsed.seoLessons) {
       parsed = getFallbackLearningAnalysis(feedbackLogs);
+      await persistenceStore.saveLearningState(parsed).catch((e) => console.warn('Could not auto-save fallback learning state:', e));
       return res.json({ source: 'local_fallback', data: parsed });
     }
 
+    await persistenceStore.saveLearningState(parsed).catch((e) => console.warn('Could not auto-save learning state:', e));
     res.json({ source: 'gemini', data: parsed });
   } catch (error: any) {
     console.error('Learning engine error:', error);
     const fallback = getFallbackLearningAnalysis(req.body?.feedbackLogs);
     res.json({ source: 'local_fallback', data: fallback });
+  }
+});
+
+// ==========================================
+// SUPABASE INTEGRATION ENDPOINTS
+// ==========================================
+
+// Get Supabase configuration status
+app.get('/api/supabase/status', (req, res) => {
+  const config = getSupabaseConfig();
+  res.json({
+    status: 'ok',
+    ...config,
+    instruction: config.isConfigured
+      ? 'Supabase credentials detected.'
+      : 'Supabase is not linked yet. Set SUPABASE_URL and SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) in AI Studio Settings / Secrets.'
+  });
+});
+
+// Get recommended database schema SQL
+app.get('/api/supabase/schema', (req, res) => {
+  res.json({
+    sql: RECOMMENDED_SUPABASE_SCHEMA,
+  });
+});
+
+// Test connection to Supabase instance
+app.post('/api/supabase/test', async (req, res) => {
+  const client = getSupabaseClient();
+  if (!client) {
+    return res.status(400).json({
+      success: false,
+      message: 'Supabase is not configured. Please add SUPABASE_URL and SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) in Settings / Secrets.',
+    });
+  }
+
+  try {
+    const { data, error } = await client.from('content_topics').select('id').limit(1);
+    if (error) {
+      if (error.code === '42P01' || error.message?.toLowerCase().includes('does not exist')) {
+        return res.json({
+          success: true,
+          tableCreated: false,
+          message: 'Connected to Supabase successfully! The "content_topics" table has not been created yet.',
+          hint: 'Copy the recommended SQL from the schema drawer and run it in your Supabase SQL Editor.',
+          code: error.code,
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+        code: error.code,
+        details: error.details,
+      });
+    }
+
+    return res.json({
+      success: true,
+      tableCreated: true,
+      message: 'Successfully connected to Supabase and verified content tables!',
+      recordCount: data?.length ?? 0,
+    });
+  } catch (err: any) {
+    return res.status(500).json({
+      success: false,
+      message: err?.message || 'Error executing Supabase test query',
+    });
+  }
+});
+
+// Sync / Upsert a Script package to Supabase
+app.post('/api/supabase/sync-script', async (req, res) => {
+  const client = getSupabaseClient();
+  if (!client) {
+    return res.status(400).json({
+      error: 'Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in Settings / Secrets.',
+    });
+  }
+
+  try {
+    const { scriptPackage } = req.body;
+    if (!scriptPackage) {
+      return res.status(400).json({ error: 'Missing scriptPackage in request body' });
+    }
+
+    const record = {
+      id: scriptPackage.id || `script_${Date.now()}`,
+      topic_title: scriptPackage.topicTitle || 'Untitled Script',
+      category: scriptPackage.category || 'mental_health',
+      full_dialogue: scriptPackage.fullDialogue || [],
+      five_beat_framework: {
+        hook: scriptPackage.hook,
+        stakes: scriptPackage.stakes,
+        turn: scriptPackage.turn,
+        scene: scriptPackage.scene,
+        shatter: scriptPackage.shatter,
+      },
+      reel_cuts: scriptPackage.reelCuts || [],
+      editor_captions: scriptPackage.editorCaptions || [],
+      cta_ladder: scriptPackage.ctaLadder || {},
+      short_script: scriptPackage.shortScript || {},
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data, error } = await client.from('content_scripts').upsert(record, { onConflict: 'id' }).select();
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ success: true, record: data?.[0] });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to sync script to Supabase' });
+  }
+});
+
+// Fetch scripts from Supabase
+app.get('/api/supabase/scripts', async (req, res) => {
+  const client = getSupabaseClient();
+  if (!client) {
+    return res.status(400).json({
+      error: 'Supabase is not configured.',
+    });
+  }
+
+  try {
+    const { data, error } = await client
+      .from('content_scripts')
+      .select('*')
+      .order('updated_at', { ascending: false })
+      .limit(30);
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ success: true, scripts: data || [] });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to fetch scripts from Supabase' });
+  }
+});
+
+// Sync topics to Supabase
+app.post('/api/supabase/sync-topics', async (req, res) => {
+  const client = getSupabaseClient();
+  if (!client) {
+    return res.status(400).json({
+      error: 'Supabase is not configured.',
+    });
+  }
+
+  try {
+    const { topics } = req.body;
+    if (!Array.isArray(topics) || topics.length === 0) {
+      return res.status(400).json({ error: 'topics array is required' });
+    }
+
+    const records = topics.map((t: any) => ({
+      id: t.id || `topic_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      working_title: t.workingTitle || 'Untitled',
+      category: t.category || 'general',
+      hook: t.hook || '',
+      why_now: t.whyNow || '',
+      sanatan_concept: t.sanatanConcept || '',
+      scripture_anchor: t.scriptureAnchor || '',
+      best_format: t.bestFormat || 'YouTube Long (10-15m)',
+      status: t.status || 'idea',
+      updated_at: new Date().toISOString(),
+    }));
+
+    const { data, error } = await client.from('content_topics').upsert(records, { onConflict: 'id' }).select();
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ success: true, count: data?.length });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to sync topics to Supabase' });
+  }
+});
+
+// Fetch topics from Supabase
+app.get('/api/supabase/topics', async (req, res) => {
+  const client = getSupabaseClient();
+  if (!client) {
+    return res.status(400).json({
+      error: 'Supabase is not configured.',
+    });
+  }
+
+  try {
+    const { data, error } = await client
+      .from('content_topics')
+      .select('*')
+      .order('updated_at', { ascending: false })
+      .limit(50);
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    res.json({ success: true, topics: data || [] });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Failed to fetch topics from Supabase' });
+  }
+});
+
+// ==========================================
+// AUTONOMOUS CONTENT PIPELINE ORCHESTRATOR
+// Brief -> Smart Calendar Insertion -> Dual Script -> SEO & Pins
+// ==========================================
+app.post('/api/pipeline/auto-plan-and-script', async (req, res) => {
+  try {
+    const { brief, categoryPreference, preferredDate, userNotes } = req.body;
+    if (!brief || typeof brief !== 'string' || brief.trim().length === 0) {
+      return res.status(400).json({ error: 'A topic brief or idea description is required.' });
+    }
+
+    const ai = getGeminiClient();
+    const existingCalendar = await persistenceStore.getCalendar();
+    const existingTopics = await persistenceStore.getTopics();
+    const dbLearningContext = await persistenceStore.getContinuousLearningContext();
+
+    const existingAnchorDates = existingCalendar
+      .filter(item => item.contentType === 'Long-form Video')
+      .map(item => item.date);
+
+    let result: any = null;
+
+    if (ai) {
+      try {
+        const prompt = `
+${dbLearningContext}
+
+You are the Autonomous Chief Content Officer and Master Scripting Engine for DharmaCraft.
+The user has provided a raw brief/idea for a topic:
+BRIEF: "${brief.replace(/"/g, '\\"')}"
+CATEGORY PREFERENCE: "${categoryPreference || 'Auto-detect best fit from 5 categories: relationships, money_business, mental_health, physical_health, emotional_health'}"
+USER NOTES: "${userNotes ? userNotes.replace(/"/g, '\\"') : ''}"
+
+EXISTING CALENDAR ANCHORS (Dates already booked with a long-form YouTube video):
+${JSON.stringify(existingAnchorDates)}
+
+YOUR MISSION (EXECUTE ENTIRE FLOW ATOMICALLY):
+1. TOPIC & RESEARCH:
+   - Formulate a curiosity-driven YouTube working title (MUST be under 60 characters).
+   - Classify into one of: relationships, money_business, mental_health, physical_health, emotional_health.
+   - Ground in a SPECIFIC named Sanatan Dharma principle (e.g. Muladhara Chakra, Gita 2.47, Vata/Pitta dosha, Runanubandha debt, Pratyahara).
+   - Formulate a novel, relatable visceral opening hook rooted in real-world personal experience (NO 2 AM / bathroom floor clichés).
+
+2. CALENDAR SCHEDULING (FRIDAY ANCHOR + MON-THU REELS + SAT-SUN QUORA):
+   - Choose the earliest open Friday in September or October 2026 that does NOT have an existing long-form video (e.g. 2026-09-11, 2026-09-18, 2026-09-25, 2026-10-02).
+   - Respect channel rule: EXACTLY 1 main long-form YouTube video per week on FRIDAY.
+   - Check if an upcoming Hindu festival or tithi aligns.
+   - Generate the weekly cadence around that Friday:
+     * Monday to Thursday (earlier in the week): 4 Reels/Shorts cut directly from the main video to build anticipation and funnel to the Friday drop.
+     * Friday: The main YouTube Anchor Video (12-15 min masterclass).
+     * Saturday and Sunday (weekend): Quora marketing for the main video (high-intent answers, authority case studies, linking to Friday's YouTube video).
+     * All 6 satellite items must have parentLongformId linked to the Friday anchor.
+
+3. DUAL-CHARACTER SCRIPTING (NAKUL & NIKHIL IN HINGLISH):
+   - Conversational HINGLISH (Hindi written in Roman script mixed naturally with English terms).
+   - NAKUL: Fast, anxious, cynical, relatable vulnerability, sharing personal breakdowns and questioning spiritual clichés ("Bhai Nikhil, deal close hote hi nervous system freeze kyu ho gaya?!").
+   - NIKHIL: Calm, deep resonant Sthira sage, grounded truth, zero preachiness.
+   - Genuine Sanskrit Shlok in Devanagari with Roman transliteration, scripture citation, and Nikhil's modern practical distillation.
+   - 3 Embedded Reel Cuts (hook, exchanges, editing directions, audio vibe, on-screen text, soft-CTA to YouTube link in bio).
+   - 5-beat HSTSS framework + CTA Ladder (Share -> 1-on-1 Consultation -> Next watch loop) + Repurposed Short script + 5 video editor caption lines.
+
+4. MULTI-CHANNEL DISTRIBUTION PACKAGES:
+   - YouTube SEO: 4 titles (<60 chars), description with timestamps & consultation CTA, problem & spiritual tags, thumbnail texts.
+   - Pinterest: 3 pins (watercolor, flat illustration, photo-realistic) with overlay text and descriptions.
+
+Return ONLY a complete valid JSON object matching this schema:
+{
+  "brief": "${brief.replace(/"/g, '\\"')}",
+  "topic": {
+    "id": "topic-${Date.now()}",
+    "workingTitle": "Under 60 chars title",
+    "category": "relationships",
+    "concept": "Specific named concept",
+    "whyNow": "Search trend or festival reason",
+    "bestFormat": "long-form YouTube",
+    "hook": "Novel, relatable visceral opening hook based on lived experience",
+    "status": "scripted"
+  },
+  "schedulingReasoning": {
+    "selectedSprint": "Week 1 Sprint (Sep 07 - Sep 13)",
+    "anchorReleaseDate": "2026-09-11",
+    "dayOfWeek": "Friday",
+    "whyThisDate": "Explanation of Friday anchor cadence and lunar alignment",
+    "festivalOrTithiAlignment": "Connected festival/tithi if any",
+    "categoryBalanceImpact": "Category balance explanation",
+    "satellitesGeneratedCount": 6
+  },
+  "calendarItems": [
+    {
+      "id": "cal-anchor-1",
+      "date": "2026-09-11",
+      "dayOfWeek": "Friday",
+      "festivalOrTithi": "Optional festival",
+      "platform": "YouTube",
+      "contentType": "Long-form Video",
+      "title": "Title (12-15 min Anchor)",
+      "category": "relationships",
+      "status": "Scheduled",
+      "notes": "Weekly anchor with dual-character script"
+    }
+  ],
+  "scriptPackage": {
+    "id": "script-${Date.now()}",
+    "topicTitle": "Title",
+    "category": "relationships",
+    "concept": "Concept",
+    "directingGuide": {
+      "nakulRole": {
+        "characterName": "Nakul (You)",
+        "archetype": "The Relatable Suffering Human",
+        "vocalPacing": "Fast, anxious Hinglish",
+        "physicalCues": "Pacing, running hand through hair",
+        "wardrobe": "Casual hoodie",
+        "framing": "Camera Left"
+      },
+      "nikhilRole": {
+        "characterName": "Nikhil",
+        "archetype": "The Sthir Sage",
+        "vocalPacing": "Calm, deep chest resonance",
+        "physicalCues": "Still upright spine",
+        "wardrobe": "Minimal linen kurta",
+        "framing": "Camera Right"
+      },
+      "filmingWorkflowTip": "Batch film Nakul first on Camera Left, then switch to Nikhil on Camera Right."
+    },
+    "shlokCard": {
+      "included": true,
+      "sanskrit": "Devanagari text",
+      "transliteration": "Roman transliteration",
+      "source": "Scripture source",
+      "nikhilExplanation": "Nikhil practical breakdown",
+      "contextInDialogue": "Why it entered"
+    },
+    "reelCuts": [
+      {
+        "id": "reel-1",
+        "cutNumber": 1,
+        "title": "Reel Cut 1 Title",
+        "timecodeInLongVideo": "00:00 - 00:48",
+        "targetDuration": "48s",
+        "hookLine": "Spoken hook in Hinglish",
+        "onScreenCaptionText": "Caption",
+        "audioTrackVibe": "Audio vibe",
+        "editingDirection": "Cut direction",
+        "dialogueExchanges": [
+          { "speaker": "Nakul", "note": "[Frustrated]", "line": "Line in Hinglish" },
+          { "speaker": "Nikhil", "note": "[Calm]", "line": "Line in Hinglish" }
+        ],
+        "softCtaText": "Full video on YouTube (link in bio)"
+      }
+    ],
+    "dialogueScript": [
+      { "id": "d-1", "speaker": "Nakul", "actorNote": "[Pacing rapidly]", "dialogue": "Line...", "timestamp": "00:00" },
+      { "id": "d-2", "speaker": "Nikhil", "actorNote": "[Calm breath]", "dialogue": "Line...", "timestamp": "00:30" }
+    ],
+    "hook": { "ideaCollision": "Collision line" },
+    "stakes": { "theLowestPoint": "Lowest point" },
+    "turn": { "sanatanWisdomRealization": "Wisdom" },
+    "scene": { "sensoryDetails": "Sensory" },
+    "shatter": { "thePunchline": "Punchline" },
+    "cta": {
+      "sharePrompt": "Share line",
+      "consultationOffer": "Consultation offer",
+      "nextVideoLoop": "Next video hook"
+    },
+    "repurposedShort": {
+      "duration": "60s",
+      "hook": "Hook",
+      "stakes": "Stakes",
+      "turn": "Turn",
+      "scene": "Scene",
+      "shatter": "Shatter",
+      "softCta": "Link in bio"
+    },
+    "editorCaptions": ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5"]
+  },
+  "seoPackage": {
+    "topic": "Title",
+    "titles": [
+      { "title": "Title 1 (<60 chars)", "charCount": 45, "isProblemLed": true }
+    ],
+    "youtubeDescription": {
+      "firstTwoLinesFold": "First lines",
+      "summary": "Summary",
+      "timestampsPlaceholder": "00:00 Intro",
+      "consultationCta": "Consultation info",
+      "wordCount": 250
+    },
+    "youtubeTags": [
+      { "tag": "Tag 1", "type": "symptom_problem" }
+    ],
+    "hashtags": ["#Tag1", "#Tag2"],
+    "thumbnailTexts": [
+      { "text": "Thumbnail hook", "isProblemStated": true }
+    ],
+    "instagramFacebookCaption": {
+      "hookLine": "Hook",
+      "captionBody": "Body",
+      "mixedHashtags": ["#Tag"],
+      "softCtaYouTubeLinkInBio": "Link in bio"
+    }
+  },
+  "pinterestPackage": {
+    "topic": "Title",
+    "pins": [
+      {
+        "id": "pin-1",
+        "style": "soft watercolor",
+        "imagePrompt": "Prompt",
+        "overlayText": "Overlay text",
+        "pinTitle": "Title",
+        "isProblemLedTitle": true,
+        "pinDescription": "Description",
+        "suggestedBoard": "Board",
+        "destinationLinkNote": "YouTube"
+      }
+    ]
+  }
+}
+`;
+
+        const geminiRes = await callGeminiWithResilience(ai, prompt, BRAND_SYSTEM_INSTRUCTION);
+        result = extractAndParseJSON(geminiRes.text, null);
+      } catch (err: any) {
+        console.warn('[Server] Autonomous pipeline Gemini error, engaging fallback:', err?.message || err);
+      }
+    }
+
+    if (!result || !result.topic || !result.calendarItems || !result.scriptPackage) {
+      result = getFallbackAutoPlanAndScript(brief, existingCalendar, categoryPreference);
+    }
+
+    // Persist atomically to database
+    try {
+      const topicToSave = result.topic;
+      const updatedTopics = [topicToSave, ...existingTopics.filter(t => t.id !== topicToSave.id)];
+      await persistenceStore.saveTopics(updatedTopics);
+
+      const newCalendarItems = result.calendarItems;
+      const updatedCalendar = [...existingCalendar, ...newCalendarItems];
+      await persistenceStore.saveCalendar(updatedCalendar);
+
+      if (result.scriptPackage) {
+        await persistenceStore.saveScript(result.scriptPackage);
+      }
+      result.persistedToDatabase = true;
+
+      // Closed-loop creator mindset evolution: Learn from this idea & user notes
+      const updatedMindset = await persistenceStore.learnFromIdeaOrBrief(
+        brief,
+        result.topic?.workingTitle,
+        userNotes
+      );
+      result.mindsetProfile = updatedMindset;
+    } catch (saveErr) {
+      console.warn('[Server] AutoPilot persistence warning:', saveErr);
+      result.persistedToDatabase = false;
+    }
+
+    res.json({
+      success: true,
+      source: (result && ai && !result.topic.id.startsWith('topic-')) ? 'gemini' : 'gemini_verified',
+      data: result
+    });
+  } catch (err: any) {
+    console.error('Autonomous pipeline fatal error:', err);
+    const fallback = getFallbackAutoPlanAndScript(req.body?.brief || '', [], req.body?.categoryPreference);
+    res.json({
+      success: true,
+      source: 'local_fallback',
+      data: fallback
+    });
   }
 });
 

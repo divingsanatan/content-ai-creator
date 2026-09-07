@@ -1,3 +1,5 @@
+import { CategoryDefinition } from '../types';
+
 export interface HinduCalendarEvent {
   date: string; // YYYY-MM-DD
   name: string;
@@ -97,6 +99,54 @@ export const HINDU_CALENDAR_EVENTS: HinduCalendarEvent[] = [
     spiritualConcept: 'Ashta Lakshmi & shifting from desperate scarcity to receptive abundance',
     suggestedAngle: 'Why your money manifestation rituals fail: the difference between desperate greed and true Lakshmi consciousness.'
   }
+];
+
+export const DEFAULT_CATEGORIES: CategoryDefinition[] = [
+  {
+    id: 'relationships',
+    label: 'Relationships',
+    color: 'text-pink-400',
+    bg: 'bg-pink-950/60',
+    border: 'border-pink-800/60',
+    description: 'Ancestral debt, Runanubandha, marriage karma, family bonds, and codependency.',
+    isDefault: true,
+  },
+  {
+    id: 'money_business',
+    label: 'Money & Career',
+    color: 'text-amber-400',
+    bg: 'bg-amber-950/60',
+    border: 'border-amber-800/60',
+    description: 'Financial freeze, Muladhara survival anxiety, entrepreneurship, and ethical wealth.',
+    isDefault: true,
+  },
+  {
+    id: 'mental_health',
+    label: 'Mental Health',
+    color: 'text-blue-400',
+    bg: 'bg-blue-950/60',
+    border: 'border-blue-800/60',
+    description: 'Corporate burnout, panic loops, Vata dosha deregulation, and overthinking.',
+    isDefault: true,
+  },
+  {
+    id: 'physical_health',
+    label: 'Physical Health',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-950/60',
+    border: 'border-emerald-800/60',
+    description: 'Somatic throat knots, chronic fatigue, Prana depletion, and Ayurvedic rejuvenation.',
+    isDefault: true,
+  },
+  {
+    id: 'emotional_health',
+    label: 'Emotional Health',
+    color: 'text-purple-400',
+    bg: 'bg-purple-950/60',
+    border: 'border-purple-800/60',
+    description: 'Guilt cords, grief, repressed anger, and Anahata heart chakra blockages.',
+    isDefault: true,
+  },
 ];
 
 export const CATEGORY_LABELS: Record<string, { label: string; color: string; bg: string; border: string }> = {

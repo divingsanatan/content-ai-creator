@@ -167,7 +167,7 @@ export const StrategyHubView: React.FC = () => {
                     Ask them to send this video to one person in their life who is quietly drowning in this specific issue. Generosity fuels social sharing.
                   </p>
                   <span className="inline-block mt-2 font-mono text-[11px] text-amber-300/90 bg-slate-950 p-2 rounded border border-slate-800/80">
-                    "If you have a friend who is lying awake at 2am with this exact knot in their chest, send this to them."
+                    "If you have a friend who is fighting this exact freeze and chest knot under pressure, send this to them."
                   </span>
                 </div>
               </div>
